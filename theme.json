@@ -1,0 +1,54 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"settings": {
+		"appearanceTools": false,
+		"color": {
+			"custom": false,
+			"customGradient": true,
+			"defaultPalette": false,
+			"defaultGradients": false,
+			"palette": [
+				{ "slug": "teal", "name": "FoundVital Teal", "color": "#045c77" },
+				{ "slug": "teal-deep", "name": "Deep Teal", "color": "#033f53" },
+				{ "slug": "gold", "name": "Gold", "color": "#c4955a" },
+				{ "slug": "navy", "name": "Navy", "color": "#0f172a" },
+				{ "slug": "slate", "name": "Slate", "color": "#364151" },
+				{ "slug": "ice", "name": "Ice", "color": "#e7f6ff" },
+				{ "slug": "sand", "name": "Sand", "color": "#fbf7f1" },
+				{ "slug": "white", "name": "White", "color": "#ffffff" }
+			]
+		},
+		"typography": {
+			"fluid": true,
+			"fontFamilies": [
+				{
+					"slug": "poppins",
+					"name": "Poppins",
+					"fontFamily": "'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif"
+				}
+			]
+		},
+		"layout": {
+			"contentSize": "720px",
+			"wideSize": "1180px"
+		},
+		"spacing": {
+			"units": [ "px", "rem", "%" ]
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "#ffffff",
+			"text": "#364151"
+		},
+		"typography": {
+			"fontFamily": "var(--wp--preset--font-family--poppins)",
+			"lineHeight": "1.65"
+		},
+		"elements": {
+			"link": { "color": { "text": "#045c77" } },
+			"heading": { "color": { "text": "#0f172a" } }
+		}
+	}
+}

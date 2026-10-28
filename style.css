@@ -1,0 +1,13 @@
+/*
+Theme Name: FoundVital Reset
+Theme URI: https://reset.foundvital.com/
+Author: D2i Technology
+Description: Custom conversion microsite theme for FoundVital Reset™, a 12-week midlife health coaching program. Built for reset.foundvital.com as an independent WordPress install. Works with Secure Custom Fields, Rank Math SEO and (optionally) Forminator; integrates with Kit, Calendly and Stripe-hosted payment links.
+Version: 1.0.0
+Requires at least: 6.4
+Requires PHP: 8.0
+License: Proprietary - built for FoundVital
+Text Domain: fvr
+*/
+
+/* All theme styles live in assets/css/main.css (enqueued in inc/assets.php). */
