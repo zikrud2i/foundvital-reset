@@ -16,7 +16,7 @@ while ( have_posts() ) :
 			<div class="split__copy">
 				<?php fvr_breadcrumbs(); ?>
 				<p class="eyebrow"><?php echo esc_html( fvr_field( 'page_eyebrow', 'Free resource' ) ); ?></p>
-				<h1><?php echo esc_html( fvr_field( 'page_headline', 'The Midlife Health Reset Checklist' ) ); ?></h1>
+				<h1><?php echo esc_html( fvr_field( 'page_headline', 'Seven Questions to Ask Before You Change Your Midlife Health Routine' ) ); ?></h1>
 				<p class="lead"><?php echo esc_html( fvr_field( 'page_intro', 'A free, practical checklist to help you see where to focus first as you build a routine that fits your real life.' ) ); ?></p>
 				<ul class="check-list">
 					<?php foreach ( $benefits as $b ) : ?>

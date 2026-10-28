@@ -44,6 +44,7 @@ add_action(
 					fvr_f( 'hero_eyebrow', 'Hero: eyebrow' ),
 					fvr_f( 'hero_headline', 'Hero: headline' ),
 					fvr_f( 'hero_sub', 'Hero: supporting message', 'textarea' ),
+					fvr_f( 'hero_sub_strong', 'Hero: supporting message, bold closing sentence', 'textarea' ),
 					fvr_f( 'hero_points', 'Hero: highlight points', 'textarea', $lines ),
 					fvr_f( 'hero_note', 'Hero: coaching vs. medical note', 'textarea' ),
 					fvr_f( 'recog_heading', 'Recognition: heading' ),

@@ -62,12 +62,17 @@ function fvr_kit_request( string $path, array $body ) {
  * @param string $first   Optional first name.
  * @param int    $form_id Kit form ID (0 = skip).
  * @param int[]  $tag_ids Kit tag IDs.
+ * @param array  $fields  Kit custom fields by key, e.g. array( 'state' => 'Ohio' ). Each must exist in Kit.
  * @return true|WP_Error
  */
-function fvr_kit_subscribe( string $email, string $first = '', int $form_id = 0, array $tag_ids = array() ) {
+function fvr_kit_subscribe( string $email, string $first = '', int $form_id = 0, array $tag_ids = array(), array $fields = array() ) {
 	$sub = array( 'email_address' => $email );
 	if ( '' !== $first ) {
 		$sub['first_name'] = $first;
+	}
+	$fields = array_filter( $fields, 'strlen' );
+	if ( $fields ) {
+		$sub['fields'] = $fields;
 	}
 	$r = fvr_kit_request( '/subscribers', $sub ); // Upsert: creates or updates the subscriber.
 	if ( is_wp_error( $r ) ) {

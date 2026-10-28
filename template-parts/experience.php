@@ -7,10 +7,10 @@
 
 $checkins = fvr_lines( fvr_opt( 'checkin_details' ) );
 $cards    = array(
-	array( 'compass', 'Your Starting Point', fvr_field( 'exp1_text', 'Begin with onboarding, your goals, and baseline information, plus three starting commitments that help you choose practical priorities.' ), array( 'Onboarding', 'Your goals', 'Baseline information', '3 starting commitments' ) ),
+	array( 'compass', 'Your Starting Point', fvr_field( 'exp1_text', 'Begin with a one-hour 1:1 onboarding call with Tara, your goals, and baseline information, plus three core commitments that help you choose practical priorities.' ), array( 'Onboarding call', 'Your goals', 'Baseline information', '3 core commitments' ) ),
 	array( 'leaf', 'Nutrition, Strength, and Recovery', fvr_field( 'exp2_text', 'Protein and meal-planning resources, progressive movement and strength training, and education on sleep, stress, recovery, and midlife health.' ), array( 'Protein & meal planning', 'Strength training', 'Sleep & stress', 'Recovery' ) ),
-	array( 'chat', 'Coaching and Accountability', fvr_field( 'exp3_text', 'Scheduled, personalized check-ins to review how things are going, ask questions, and make adjustments.' ), array( 'Scheduled check-ins', 'Reviews', 'Questions', 'Adjustments' ) ),
-	array( 'toolkit', 'Tools and Community', fvr_field( 'exp4_text', 'The FoundVital Blueprint, Welcome Kit, worksheets, a full-term learning library, and a private member community.' ), array( 'FoundVital Blueprint', 'Welcome Kit', 'Worksheets', 'Learning library', 'Private community' ) ),
+	array( 'chat', 'Coaching and Accountability', fvr_field( 'exp3_text', 'A one-hour 1:1 onboarding call, then five scheduled 30-minute check-ins with Tara to review how things are going, ask questions, and make adjustments.' ), array( '1:1 onboarding', '5 check-ins', 'Questions', 'Adjustments' ) ),
+	array( 'toolkit', 'Tools and Community', fvr_field( 'exp4_text', 'The FoundVital Blueprint, your personalized plan for the whole 12-week Reset, prepared by Tara. Plus the Welcome Kit, worksheets, your smart scale, a full-term learning library, and a private member community.' ), array( 'FoundVital Blueprint', 'Welcome Kit', 'Smart scale', 'Learning library', 'Private community' ) ),
 );
 ?>
 <section class="section" id="how-reset-works" aria-labelledby="exp-title">

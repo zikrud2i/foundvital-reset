@@ -70,8 +70,8 @@ function fvr_run_setup(): void {
 		update_option( 'page_on_front', $home );
 	}
 
-	fvr_ensure_page( 'checklist', 'The Midlife Health Reset Checklist', $T . 'checklist.php' );
-	fvr_ensure_page( 'quiz', 'What\'s Your Best Next Step for Midlife Health?', $T . 'quiz.php' );
+	fvr_ensure_page( 'checklist', 'Seven Questions to Ask Before You Change Your Midlife Health Routine', $T . 'checklist.php' );
+	fvr_ensure_page( 'quiz', 'What\'s Getting in the Way of a Health Routine That Works for You?', $T . 'quiz.php' );
 	fvr_ensure_page( 'results', 'Quiz Results', '' );
 	fvr_ensure_page( 'results/foundations', 'Build Your Foundations', $T . 'quiz-result.php' );
 	fvr_ensure_page( 'results/routine', 'Create a Workable Routine', $T . 'quiz-result.php' );
@@ -131,7 +131,7 @@ function fvr_seed_faqs(): void {
 		array( 'What support is available between sessions?', '[CONFIRM] Enter exactly what is available between check-ins (e.g. community, messaging, response times). Do not imply concierge access.', 'draft' ),
 		array( 'Do I need a gym?', '[CONFIRM] Enter the approved equipment guidance for the strength and movement portions of Reset.', 'draft' ),
 		array( 'Are labs or medications included?', 'No. Lab testing, medication, and other clinical services are separate from Reset. Reset is coaching and education. Medical evaluation, prescribing, and clinical lab interpretation are handled by separate licensed providers.', 'publish' ),
-		array( 'What happens after week 12?', '[CONFIRM] Describe what participants keep access to, and the optional "Optimize" continuation with its approved terms.', 'draft' ),
+		array( 'What happens after week 12?', '[CONFIRM] Describe what participants keep access to, and the optional FoundVital Sustain™ membership with its approved terms.', 'draft' ),
 	);
 	foreach ( $items as $i => $it ) {
 		wp_insert_post(

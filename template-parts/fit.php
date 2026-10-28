@@ -7,7 +7,7 @@
 
 $good     = fvr_lines( fvr_field( 'fit_good', "You're already caring for your health and want structure and guidance.\nYou're comfortable working independently between scheduled check-ins.\nYou'd rather choose a few practical priorities than follow another complicated plan." ) );
 $not      = fvr_lines( fvr_field( 'fit_not', "A diagnostic, treatment, or medication-access service.\nA guarantee of rapid weight loss or any specific result.\nA replacement for care from your licensed healthcare provider." ) );
-$included = fvr_lines( fvr_field( 'fit_included', "Onboarding, goal-setting, and three starting commitments\nProtein and meal-planning resources\nProgressive movement and strength training\nEducation on sleep, stress, recovery, and midlife health\nScheduled personalized coaching check-ins\nThe FoundVital Blueprint, Welcome Kit, and worksheets\nA full-term learning library and private member community" ) );
+$included = fvr_lines( fvr_field( 'fit_included', "Onboarding, goal-setting, and your three core commitments\nA one-hour 1:1 onboarding call with Tara\nFive 30-minute coaching check-ins with Tara\nThe FoundVital Blueprint, your personalized plan for the whole 12-week Reset, prepared by Tara\nProtein and meal-planning resources\nProgressive movement and strength training\nEducation on sleep, stress, recovery, and midlife health\nA FoundVital smart scale (body composition scale), mailed to you\nThe Welcome Kit and worksheets\nA full-term learning library and private member community" ) );
 $weekly   = (string) fvr_field( 'fit_weekly', '' );
 ?>
 <section class="section section--sand" id="fit-and-investment" aria-labelledby="fit-title">

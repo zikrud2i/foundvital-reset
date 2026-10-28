@@ -130,16 +130,24 @@
 	/* ---------- Lead-form client hints (server still validates everything) ---------- */
 	doc.querySelectorAll('form[data-form-type]').forEach(function (form) {
 		form.addEventListener('submit', function (e) {
-			var name = form.querySelector('input[name=first_name]'), email = form.querySelector('input[type=email]'), co = form.querySelector('input[name=consent]');
-			var nameErr = name ? doc.getElementById(name.getAttribute('aria-describedby')) : null, err = doc.getElementById(email.getAttribute('aria-describedby'));
-			var nameMsg = name && !name.value.trim() ? 'Please enter your first name.' : '', msg = '';
-			if (!email.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { msg = 'Please enter a valid email address.'; }
-			else if (co && !co.checked) { msg = 'Please tick the consent box so we can email you.'; }
-			if (nameErr) { nameErr.textContent = nameMsg; nameErr.hidden = !nameMsg; name.toggleAttribute('aria-invalid', !!nameMsg); }
-			err.textContent = msg; err.hidden = !msg; email.toggleAttribute('aria-invalid', !!msg && !email.value);
-			if (nameMsg || msg) {
+			var name = form.querySelector('input[name=first_name]'), email = form.querySelector('input[type=email]'), state = form.querySelector('select[name=state]'), co = form.querySelector('input[name=consent]');
+			var checks = [
+				[name, name && !name.value.trim() ? 'Please enter your first name.' : ''],
+				[email, !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value) ? 'Please enter a valid email address.' : (co && !co.checked ? 'Please tick the consent box so we can email you.' : '')],
+				[state, state && !state.value ? 'Please choose your state of residence.' : '']
+			];
+			var firstBad = null;
+			checks.forEach(function (c) {
+				if (!c[0]) { return; }
+				var err = doc.getElementById(c[0].getAttribute('aria-describedby'));
+				var consentOnly = c[0] === email && c[1] && email.value && co && !co.checked;
+				if (err) { err.textContent = c[1]; err.hidden = !c[1]; }
+				if (c[1] && !consentOnly) { c[0].setAttribute('aria-invalid', 'true'); } else { c[0].removeAttribute('aria-invalid'); }
+				if (c[1] && !firstBad) { firstBad = consentOnly ? co : c[0]; }
+			});
+			if (firstBad) {
 				e.preventDefault();
-				(nameMsg ? name : (co && email.value && !co.checked ? co : email)).focus();
+				firstBad.focus();
 			}
 		});
 	});

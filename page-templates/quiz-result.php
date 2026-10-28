@@ -57,7 +57,7 @@ while ( have_posts() ) :
 			<?php elseif ( 'failed' === $sub ) : ?>
 				<div class="alert alert--error" role="status"><?php esc_html_e( 'We couldn\'t add your email just now. Your result is below. You can also join via the free checklist page.', 'fvr' ); ?></div>
 			<?php elseif ( 'invalid' === $sub ) : ?>
-				<div class="alert alert--error" role="status"><?php esc_html_e( 'We couldn\'t use that email address or consent selection, so nothing was subscribed. Your result is below.', 'fvr' ); ?></div>
+				<div class="alert alert--error" role="status"><?php esc_html_e( 'We couldn\'t sign you up because a detail was missing (first name, email, state or consent), so nothing was subscribed. Your result is below.', 'fvr' ); ?></div>
 			<?php endif; ?>
 
 			<div class="panel">

@@ -59,15 +59,15 @@ while ( have_posts() ) :
 
 			<div class="fit-call__book">
 				<div class="form-card" id="book">
-					<h2 class="form-card__title"><?php esc_html_e( 'Choose a time', 'fvr' ); ?></h2>
-					<?php if ( $cal ) : ?>
+					<h2 class="form-card__title screen-reader-text"><?php esc_html_e( 'Choose a time', 'fvr' ); ?></h2>
+					<?php if ( $cal && $embed ) : ?>
+						<div class="calendly" data-calendly-url="<?php echo esc_url( $cal ); ?>" aria-live="polite">
+							<noscript><p><?php esc_html_e( 'JavaScript is needed to show the calendar here. Please use the link below.', 'fvr' ); ?></p></noscript>
+						</div>
+						<p class="fineprint"><?php esc_html_e( 'Scheduling is handled securely by Calendly.', 'fvr' ); ?> <a href="<?php echo esc_url( $cal ); ?>" target="_blank" rel="noopener noreferrer" data-track="calendly_open_click"><?php esc_html_e( 'Calendar not loading? Open it in a new tab', 'fvr' ); ?><span class="screen-reader-text"> <?php esc_html_e( '(opens in a new tab)', 'fvr' ); ?></span></a></p>
+					<?php elseif ( $cal ) : ?>
 						<?php fvr_btn( __( 'Open the booking calendar', 'fvr' ), $cal, 'primary', 'calendly_open_click', 'btn--block' ); ?>
 						<p class="fineprint"><?php esc_html_e( 'Scheduling is handled securely by Calendly and opens in a new tab.', 'fvr' ); ?></p>
-						<?php if ( $embed ) : ?>
-							<div class="calendly" data-calendly-url="<?php echo esc_url( $cal ); ?>" aria-live="polite">
-								<noscript><p><?php esc_html_e( 'JavaScript is needed to show the calendar here. Please use the button above.', 'fvr' ); ?></p></noscript>
-							</div>
-						<?php endif; ?>
 					<?php else : ?>
 						<p><?php esc_html_e( 'Online booking is being set up. Please check back soon.', 'fvr' ); ?></p>
 						<?php fvr_pending( 'Add the Calendly URL in Reset Settings > Links & checkout.' ); ?>

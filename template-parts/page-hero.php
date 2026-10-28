@@ -11,7 +11,7 @@ $headline = fvr_field( 'page_headline', '' ) ? fvr_field( 'page_headline', '' ) 
 $intro    = fvr_field( 'page_intro', '' ) ? fvr_field( 'page_intro', '' ) : ( $args['intro'] ?? '' );
 ?>
 <section class="page-hero">
-	<div class="container container--narrow text-center">
+	<div class="container text-center">
 		<?php fvr_breadcrumbs(); ?>
 		<?php if ( $eyebrow ) : ?>
 			<p class="eyebrow"><?php echo esc_html( $eyebrow ); ?></p>

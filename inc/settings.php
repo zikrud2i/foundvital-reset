@@ -31,10 +31,11 @@ function fvr_settings_schema(): array {
 			'label'  => __( 'Pricing', 'fvr' ),
 			'fields' => array(
 				array( 'key' => 'price_show', 'label' => 'Show pricing block', 'type' => 'checkbox', 'desc' => 'Leave OFF until the client approves the exact price and terms.' ),
-				array( 'key' => 'price_text', 'label' => 'Total investment', 'type' => 'text', 'desc' => 'Exactly as approved, e.g. the confirmed total. No guessed amounts.' ),
+				array( 'key' => 'price_text', 'label' => 'Price', 'type' => 'text', 'desc' => 'Exactly as approved, shown as the headline of the pricing card. No guessed amounts.' ),
 				array( 'key' => 'price_terms', 'label' => 'Payment options & terms', 'type' => 'textarea', 'desc' => 'One item per line (payment options, full financial obligation, refund/program terms). Only enter approved terms.' ),
 				array( 'key' => 'checkin_details', 'label' => 'Coaching check-in details', 'type' => 'textarea', 'desc' => 'Confirmed frequency, format, provider and between-check-in support. One item per line. Do not imply unlimited or concierge access.' ),
-				array( 'key' => 'optimize_terms', 'label' => 'Optional "Optimize" continuation terms', 'type' => 'textarea', 'desc' => 'Approved terms only. Hidden when blank.' ),
+				array( 'key' => 'guarantee_text', 'label' => 'Completion Guarantee', 'type' => 'textarea', 'desc' => 'Shown under the price with the heading "Completion Guarantee". Hidden when blank.' ),
+				array( 'key' => 'optimize_terms', 'label' => 'FoundVital Sustain™ membership terms', 'type' => 'textarea', 'desc' => 'Approved terms only. Hidden when blank.' ),
 				array( 'key' => 'clarity_test_price', 'label' => 'Clarity: testing price (OutfitMD)', 'type' => 'text' ),
 				array( 'key' => 'clarity_coach_price', 'label' => 'Clarity: coaching price (FoundVital Stripe)', 'type' => 'text' ),
 				array( 'key' => 'clarity_total_price', 'label' => 'Clarity: combined total', 'type' => 'text' ),

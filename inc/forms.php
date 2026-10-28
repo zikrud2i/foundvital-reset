@@ -18,6 +18,7 @@ function fvr_error_message( string $code ): string {
 		'captcha' => 'Please complete the spam check and try again.',
 		'name'    => 'Please enter your first name.',
 		'email'   => 'Please enter a valid email address.',
+		'state'   => 'Please choose your state of residence.',
 		'consent' => 'Please tick the consent box so we can email you.',
 		'config'  => 'Sign-up isn\'t available right now. Please try again later.',
 		'kit'     => 'We couldn\'t complete your sign-up just now. Please try again in a moment.',
@@ -63,6 +64,43 @@ function fvr_privacy_link(): string {
 	return '';
 }
 
+/** The 50 US states, for the "State of residence" field. */
+function fvr_us_states(): array {
+	return array( 'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming' );
+}
+
+/** Posted state, or '' when missing or not one of the 50 states. */
+function fvr_posted_state(): string {
+	$state = isset( $_POST['state'] ) ? sanitize_text_field( wp_unslash( $_POST['state'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+	return in_array( $state, fvr_us_states(), true ) ? $state : '';
+}
+
+/** "State of residence" dropdown. */
+function fvr_state_field( string $suffix ): void {
+	?>
+	<div class="field">
+		<label for="fvr-st-<?php echo esc_attr( $suffix ); ?>"><?php esc_html_e( 'State of residence', 'fvr' ); ?> <span class="req">*</span></label>
+		<select id="fvr-st-<?php echo esc_attr( $suffix ); ?>" name="state" autocomplete="address-level1" required aria-describedby="fvr-sterr-<?php echo esc_attr( $suffix ); ?>">
+			<option value=""><?php esc_html_e( 'Select your state', 'fvr' ); ?></option>
+			<?php foreach ( fvr_us_states() as $st ) : ?>
+				<option value="<?php echo esc_attr( $st ); ?>"><?php echo esc_html( $st ); ?></option>
+			<?php endforeach; ?>
+		</select>
+		<p class="field__error" id="fvr-sterr-<?php echo esc_attr( $suffix ); ?>" role="alert" hidden></p>
+	</div>
+	<?php
+}
+
+/** Line shown under every sign-up form. Links to the policy once it is published. */
+function fvr_signup_privacy_note(): void {
+	$p     = get_page_by_path( 'privacy-policy' );
+	$label = esc_html__( 'Privacy Policy', 'fvr' );
+	if ( $p && 'publish' === $p->post_status ) {
+		$label = '<a href="' . esc_url( get_permalink( $p ) ) . '">' . $label . '</a>';
+	}
+	echo '<p class="fineprint form__privacy">' . esc_html__( 'By signing up you agree to our', 'fvr' ) . ' ' . $label . '.</p>'; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped above.
+}
+
 /**
  * Render a lead form. Uses Forminator instead when a form ID is configured.
  *
@@ -73,6 +111,7 @@ function fvr_lead_form( string $type, string $button, string $consent = '' ): vo
 	$forminator_id = (int) fvr_opt( 'forminator_' . $type . '_id' );
 	if ( $forminator_id && shortcode_exists( 'forminator_form' ) ) {
 		echo do_shortcode( '[forminator_form id="' . $forminator_id . '"]' );
+		fvr_signup_privacy_note();
 		return;
 	}
 	if ( '' === $consent ) {
@@ -94,12 +133,14 @@ function fvr_lead_form( string $type, string $button, string $consent = '' ): vo
 		<input id="fvr-em-<?php echo esc_attr( $type ); ?>" type="email" name="email" autocomplete="email" required aria-describedby="fvr-err-<?php echo esc_attr( $type ); ?>">
 		<p class="field__error" id="fvr-err-<?php echo esc_attr( $type ); ?>" role="alert" hidden></p>
 	</div>
+	<?php fvr_state_field( $type ); ?>
 	<div class="field field--check">
 		<input id="fvr-co-<?php echo esc_attr( $type ); ?>" type="checkbox" name="consent" value="1" required>
-		<label for="fvr-co-<?php echo esc_attr( $type ); ?>"><?php echo esc_html( $consent ); ?><?php echo fvr_privacy_link(); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+		<label for="fvr-co-<?php echo esc_attr( $type ); ?>"><?php echo esc_html( $consent ); ?></label>
 	</div>
 	<button class="btn btn--primary btn--block" type="submit"><span><?php echo esc_html( $button ); ?></span><?php echo fvr_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
 	<?php
+	fvr_signup_privacy_note();
 	echo '</form>';
 }
 
@@ -127,6 +168,10 @@ function fvr_handle_subscribe(): void {
 	if ( ! is_email( $email ) ) {
 		fvr_redirect_error( 'email' );
 	}
+	$state = fvr_posted_state();
+	if ( '' === $state ) {
+		fvr_redirect_error( 'state' );
+	}
 	if ( empty( $_POST['consent'] ) ) {
 		fvr_redirect_error( 'consent' );
 	}
@@ -135,7 +180,8 @@ function fvr_handle_subscribe(): void {
 		$email,
 		$first,
 		(int) fvr_opt( 'kit_form_' . $type ),
-		array( (int) fvr_opt( 'kit_tag_' . $type ) )
+		array( (int) fvr_opt( 'kit_tag_' . $type ) ),
+		array( 'state' => $state )
 	);
 	if ( is_wp_error( $result ) ) {
 		fvr_redirect_error( 'kit_unconfigured' === $result->get_error_code() ? 'config' : 'kit' );

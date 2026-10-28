@@ -5,15 +5,16 @@
  * @package foundvital-reset
  */
 
-$points = fvr_lines( fvr_field( 'hero_points', "A clear, structured 12-week program\nSelf-paced learning and practical tools\nScheduled personalized coaching check-ins" ) );
+$points = fvr_lines( fvr_field( 'hero_points', "5 personal coaching check-ins with Tara\nSelf-paced learning and practical tools\nYour own body composition scale, mailed to you" ) );
 $photo  = fvr_founder_photo( 'fvr-portrait', array( 'class' => 'hero__img', 'loading' => 'eager', 'fetchpriority' => 'high', 'sizes' => '(min-width: 900px) 480px, 90vw' ) );
 ?>
 <section class="hero" aria-labelledby="hero-title">
 	<div class="container hero__grid">
 		<div class="hero__copy">
-			<p class="eyebrow"><?php echo esc_html( fvr_field( 'hero_eyebrow', 'FoundVital Reset™ · 12-week midlife health coaching' ) ); ?></p>
+			<p class="eyebrow"><?php echo esc_html( fvr_field( 'hero_eyebrow', 'For women in perimenopause and menopause' ) ); ?></p>
 			<h1 id="hero-title"><?php echo fvr_hero_headline( (string) fvr_field( 'hero_headline', 'You\'re already putting effort into your health. Get a clearer way forward.' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped inside the helper. ?></h1>
-			<p class="lead"><?php echo esc_html( fvr_field( 'hero_sub', 'FoundVital Reset is a 12-week midlife health coaching program that brings nutrition, strength, recovery, and everyday habits into one practical approach, with self-paced resources and scheduled coaching support along the way.' ) ); ?></p>
+			<?php $sub_strong = (string) fvr_field( 'hero_sub_strong', 'Finish with steadier energy, a strength routine you actually follow, and your own before-and-after numbers.' ); ?>
+			<p class="lead"><?php echo esc_html( fvr_field( 'hero_sub', 'A 12-week coaching and education program, guided by a physician assistant with 16 years of clinical experience.' ) ); ?><?php if ( $sub_strong ) : ?> <strong><?php echo esc_html( $sub_strong ); ?></strong><?php endif; ?></p>
 
 			<ul class="pill-list">
 				<?php foreach ( $points as $pt ) : ?>

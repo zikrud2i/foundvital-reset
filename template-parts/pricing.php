@@ -7,13 +7,14 @@
 
 $show     = (bool) fvr_opt( 'price_show' ) && fvr_opt( 'price_text' );
 $terms    = fvr_lines( fvr_opt( 'price_terms' ) );
-$optimize = fvr_lines( fvr_opt( 'optimize_terms' ) );
+$optimize  = fvr_lines( fvr_opt( 'optimize_terms' ) );
+$guarantee = (string) fvr_opt( 'guarantee_text' );
 ?>
 <div class="pricing reveal" id="investment">
 	<?php if ( $show ) : ?>
 		<div class="pricing__card">
 			<p class="pricing__label">FoundVital Reset™ · <?php esc_html_e( '12-Week Coaching & Education Program', 'fvr' ); ?></p>
-			<p class="pricing__price"><span><?php esc_html_e( 'Total investment', 'fvr' ); ?></span> <?php echo esc_html( (string) fvr_opt( 'price_text' ) ); ?></p>
+			<p class="pricing__price"><?php echo esc_html( (string) fvr_opt( 'price_text' ) ); ?></p>
 			<?php if ( $terms ) : ?>
 				<ul class="check-list check-list--small">
 					<?php foreach ( $terms as $t ) : ?>
@@ -28,9 +29,16 @@ $optimize = fvr_lines( fvr_opt( 'optimize_terms' ) );
 
 	<p class="pricing__note"><?php esc_html_e( 'Lab testing, medication, and other clinical services are separate and are not included in Reset.', 'fvr' ); ?></p>
 
+	<?php if ( $guarantee ) : ?>
+		<div class="callout">
+			<h4><?php esc_html_e( 'Completion Guarantee', 'fvr' ); ?></h4>
+			<p><?php echo esc_html( $guarantee ); ?></p>
+		</div>
+	<?php endif; ?>
+
 	<?php if ( $optimize ) : ?>
 		<div class="callout">
-			<h4><?php esc_html_e( 'Optional Optimize continuation', 'fvr' ); ?></h4>
+			<h4><?php esc_html_e( 'FoundVital Sustain™', 'fvr' ); ?></h4>
 			<ul class="check-list check-list--small">
 				<?php foreach ( $optimize as $t ) : ?>
 					<li><?php echo fvr_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php echo esc_html( $t ); ?></span></li>

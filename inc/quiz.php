@@ -93,19 +93,23 @@ function fvr_handle_quiz(): void {
 	$winner     = ( count( $candidates ) > 1 && in_array( $tie, $candidates, true ) ) ? $tie : $candidates[0];
 	$result     = fvr_quiz_results()[ $winner ];
 
-	// Optional email capture (consent required). Only the result category is sent to Kit, never answers.
+	// Optional email capture: once any detail is given, first name, email, state and consent are all required.
+	// Only the result category is sent to Kit, never answers.
 	$sub_flag = 'none';
 	$email    = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
-	if ( 'off' !== fvr_opt( 'quiz_capture', 'optional' ) && '' !== $email ) {
-		if ( ! is_email( $email ) || empty( $_POST['consent'] ) ) {
+	$first    = isset( $_POST['first_name'] ) ? mb_substr( trim( sanitize_text_field( wp_unslash( $_POST['first_name'] ) ) ), 0, 60 ) : '';
+	$state    = fvr_posted_state();
+	$any      = '' !== $email || '' !== $first || ! empty( $_POST['state'] );
+	if ( 'off' !== fvr_opt( 'quiz_capture', 'optional' ) && $any ) {
+		if ( ! is_email( $email ) || '' === $first || '' === $state || empty( $_POST['consent'] ) ) {
 			$sub_flag = 'invalid';
 		} else {
-			$first = isset( $_POST['first_name'] ) ? mb_substr( sanitize_text_field( wp_unslash( $_POST['first_name'] ) ), 0, 60 ) : '';
-			$r     = fvr_kit_subscribe(
+			$r = fvr_kit_subscribe(
 				$email,
 				$first,
 				(int) fvr_opt( 'kit_form_quiz' ),
-				array( (int) fvr_opt( 'kit_tag_quiz_any' ), (int) fvr_opt( $result['tag'] ) )
+				array( (int) fvr_opt( 'kit_tag_quiz_any' ), (int) fvr_opt( $result['tag'] ) ),
+				array( 'state' => $state )
 			);
 			$sub_flag = is_wp_error( $r ) ? 'failed' : 'ok';
 		}

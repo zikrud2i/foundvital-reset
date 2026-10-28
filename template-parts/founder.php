@@ -11,7 +11,7 @@ $exp   = (string) fvr_opt( 'founder_experience' );
 $video = (string) fvr_opt( 'founder_video_url' );
 $name  = (string) fvr_opt( 'founder_name' );
 
-$p1 = fvr_field( 'meet_p1', 'I bring ' . implode( ' and ', $creds ) . ' credentials, clinical leadership, and lifestyle-medicine training' . ( $exp ? ', with ' . $exp . ' of experience,' : '' ) . ' to everything in Reset. I use that foundation to teach in plain language, not to hand you a résumé or a rulebook.' );
+$p1 = fvr_field( 'meet_p1', 'I\'ve spent 16 years working as a physician assistant, and my background in clinical care and lifestyle medicine has shaped how I think about health. I use that foundation to teach in plain language, not to hand you a résumé or a rulebook.' );
 $p2 = fvr_field( 'meet_p2', 'I created Reset to bring nutrition, strength, recovery, and everyday habits together in a more structured, practical way, built on informed decisions, sustainable habits, personalization, transparency, and long-term health.' );
 $p3 = fvr_field( 'meet_p3', 'Knowing the information isn\'t always enough, so my experience shapes how Reset teaches and coaches: turning what matters into steps you can actually follow.' );
 $p4 = fvr_field( 'meet_boundary', 'Reset is coaching and education. Separate licensed providers handle medical evaluation, prescribing, and clinical lab interpretation.' );

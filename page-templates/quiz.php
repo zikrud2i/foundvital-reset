@@ -16,7 +16,7 @@ while ( have_posts() ) :
 		null,
 		array(
 			'eyebrow'  => 'Free quiz · about 2 minutes',
-			'headline' => 'What\'s Your Best Next Step for Midlife Health?',
+			'headline' => 'What\'s Getting in the Way of a Health Routine That Works for You?',
 			'intro'    => 'A short, educational quiz to point you toward a helpful next step. It isn\'t a diagnosis or medical advice.',
 		)
 	);
@@ -78,18 +78,20 @@ while ( have_posts() ) :
 					<?php if ( $capture ) : ?>
 						<fieldset class="quiz__step quiz__step--final" data-step="<?php echo esc_attr( (string) ( $total + 1 ) ); ?>">
 							<legend><span class="quiz__num"><?php esc_html_e( 'Last step (optional)', 'fvr' ); ?></span><?php esc_html_e( 'Want your result and helpful follow-up by email?', 'fvr' ); ?></legend>
-							<p class="muted"><?php esc_html_e( 'You\'ll see your result either way. If you add your email, we\'ll send tips matched to your result. We only record which result you received, never your individual answers.', 'fvr' ); ?></p>
+							<p class="muted"><?php esc_html_e( 'You\'ll see your result either way. If you\'d like it by email, fill in all three fields below and we\'ll send tips matched to your result. We only record which result you received, never your individual answers.', 'fvr' ); ?></p>
+							<p class="field__error" id="quiz-caperr" role="alert" hidden></p>
 							<div class="field">
-								<label for="quiz-fn"><?php esc_html_e( 'First name (optional)', 'fvr' ); ?></label>
+								<label for="quiz-fn"><?php esc_html_e( 'First name', 'fvr' ); ?> <span class="req">*</span></label>
 								<input id="quiz-fn" type="text" name="first_name" autocomplete="given-name" maxlength="60">
 							</div>
 							<div class="field">
-								<label for="quiz-em"><?php esc_html_e( 'Email (optional)', 'fvr' ); ?></label>
+								<label for="quiz-em"><?php esc_html_e( 'Email address', 'fvr' ); ?> <span class="req">*</span></label>
 								<input id="quiz-em" type="email" name="email" autocomplete="email">
 							</div>
+							<?php fvr_state_field( 'quiz' ); ?>
 							<div class="field field--check">
 								<input id="quiz-co" type="checkbox" name="consent" value="1">
-								<label for="quiz-co"><?php esc_html_e( 'Yes, email me my result and occasional education and updates from FoundVital. I can unsubscribe at any time.', 'fvr' ); ?><?php echo fvr_privacy_link(); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+								<label for="quiz-co"><?php esc_html_e( 'Yes, email me my result and occasional education and updates from FoundVital. I can unsubscribe at any time.', 'fvr' ); ?></label>
 							</div>
 						</fieldset>
 					<?php endif; ?>
@@ -99,6 +101,11 @@ while ( have_posts() ) :
 						<button type="button" class="btn btn--primary" data-quiz-next hidden><span><?php esc_html_e( 'Next', 'fvr' ); ?></span><?php echo fvr_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
 						<button type="submit" class="btn btn--primary" data-quiz-submit><span><?php esc_html_e( 'See My Result', 'fvr' ); ?></span><?php echo fvr_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
 					</div>
+					<?php
+					if ( $capture ) {
+						fvr_signup_privacy_note();
+					}
+					?>
 				</form>
 			<?php endif; ?>
 			<p class="fineprint"><?php esc_html_e( 'This quiz is for education only and does not provide medical advice, diagnosis, or treatment.', 'fvr' ); ?></p>
