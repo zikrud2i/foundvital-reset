@@ -17,7 +17,6 @@ function fvr_settings_schema(): array {
 		'links'     => array(
 			'label'  => __( 'Links & checkout', 'fvr' ),
 			'fields' => array(
-				array( 'key' => 'main_site_url', 'label' => 'Main FoundVital site URL', 'type' => 'url', 'desc' => 'Used for the "back to FoundVital.com" links.' ),
 				array( 'key' => 'calendly_url', 'label' => 'Calendly booking URL', 'type' => 'url', 'desc' => 'Fit conversation calendar (client-supplied link pre-filled; the ?month= parameter can be removed).' ),
 				array( 'key' => 'calendly_embed', 'label' => 'Embed Calendly on /fit-call', 'type' => 'checkbox', 'desc' => 'Loads Calendly\'s inline widget (third-party script) once the visitor scrolls to it. The external link always remains as a fallback.' ),
 				array( 'key' => 'calendly_redirect_on_book', 'label' => 'Redirect to thank-you page after booking', 'type' => 'checkbox', 'desc' => 'Uses Calendly\'s verified "event scheduled" browser event from the embed. If you don\'t embed, set the redirect inside Calendly instead (paid plans).' ),

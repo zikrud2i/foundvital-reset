@@ -19,7 +19,7 @@ Plugins: Secure Custom Fields (page copy), Rank Math (SEO), Forminator (optional
 
 | Tab | What to enter |
 |---|---|
-| Links & checkout | Calendly URL (pre-filled), Stripe Payment Links (Reset, Clarity $100), OutfitMD shop URL, main-site URL, support email |
+| Links & checkout | Calendly URL (pre-filled), Stripe Payment Links (Reset, Clarity $100), OutfitMD shop URL, support email |
 | Pricing | Approved price + terms (hidden until "Show pricing block" is ticked), check-in details, Completion Guarantee, FoundVital Sustain terms |
 | Founder & brand | Portrait, credentials, experience statement (hidden until entered), video, logo override, socials |
 | Kit & forms | Kit API key (prefer `define('FVR_KIT_API_KEY','…');` in wp-config.php), Form IDs, Tag IDs, optional Turnstile |

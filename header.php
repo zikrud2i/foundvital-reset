@@ -23,7 +23,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="topbar" role="region" aria-label="<?php esc_attr_e( 'FoundVital site notice', 'fvr' ); ?>">
 	<div class="container topbar__inner">
-		<a href="<?php echo esc_url( (string) fvr_opt( 'main_site_url' ) ); ?>" rel="noopener"><span aria-hidden="true">←</span> <?php esc_html_e( 'Back to FoundVital.com', 'fvr' ); ?></a>
 		<span class="topbar__note"><?php esc_html_e( 'Coaching and education.', 'fvr' ); ?></span>
 	</div>
 </div>

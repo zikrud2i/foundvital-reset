@@ -15,7 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function fvr_defaults(): array {
 	return array(
-		'main_site_url'       => 'https://foundvital.com/',
 		'calendly_url'        => 'https://calendly.com/care-foundvital/fitcall',
 		'outfitmd_url'        => 'https://shop.foundvital.com/',
 		'lab_page_url'        => 'https://foundvital.com/lab-consultation',

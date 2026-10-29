@@ -5,7 +5,7 @@
  * @package foundvital-reset
  */
 
-$points = fvr_lines( fvr_field( 'hero_points', "5 personal coaching check-ins with Tara\nSelf-paced learning and practical tools\nYour own body composition scale, mailed to you" ) );
+$points = fvr_lines( fvr_field( 'hero_points', "Your FoundVital Blueprint: a personalized 12-week success roadmap\n1:1 onboarding call + 5 coaching check-ins with Tara\nWeekly lessons on strength, nutrition, sleep, stress and hormones\nPrivate client community and weekly progress tracker\nBody composition scale mailed to your home" ) );
 $photo  = fvr_founder_photo( 'fvr-portrait', array( 'class' => 'hero__img', 'loading' => 'eager', 'fetchpriority' => 'high', 'sizes' => '(min-width: 900px) 480px, 90vw' ) );
 ?>
 <section class="hero" aria-labelledby="hero-title">
@@ -14,9 +14,9 @@ $photo  = fvr_founder_photo( 'fvr-portrait', array( 'class' => 'hero__img', 'loa
 			<p class="eyebrow"><?php echo esc_html( fvr_field( 'hero_eyebrow', 'For women in perimenopause and menopause' ) ); ?></p>
 			<h1 id="hero-title"><?php echo fvr_hero_headline( (string) fvr_field( 'hero_headline', 'You\'re already putting effort into your health. Get a clearer way forward.' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped inside the helper. ?></h1>
 			<?php $sub_strong = (string) fvr_field( 'hero_sub_strong', 'Finish with steadier energy, a strength routine you actually follow, and your own before-and-after numbers.' ); ?>
-			<p class="lead"><?php echo esc_html( fvr_field( 'hero_sub', 'A 12-week coaching and education program, guided by a physician assistant with 16 years of clinical experience.' ) ); ?><?php if ( $sub_strong ) : ?> <strong><?php echo esc_html( $sub_strong ); ?></strong><?php endif; ?></p>
+			<p class="lead"><?php echo esc_html( fvr_field( 'hero_sub', 'A 12-week coaching and education program, guided by a physician assistant with 16 years of clinical experience. You get a personalized success roadmap built around your body, your schedule and your goals, so the effort you\'re already making goes where it counts.' ) ); ?><?php if ( $sub_strong ) : ?> <strong><?php echo esc_html( $sub_strong ); ?></strong><?php endif; ?></p>
 
-			<ul class="pill-list">
+			<ul class="hero__points">
 				<?php foreach ( $points as $pt ) : ?>
 					<li><?php echo fvr_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php echo esc_html( $pt ); ?></li>
 				<?php endforeach; ?>
