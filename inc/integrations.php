@@ -62,7 +62,7 @@ function fvr_kit_request( string $path, array $body ) {
  * @param string $first   Optional first name.
  * @param int    $form_id Kit form ID (0 = skip).
  * @param int[]  $tag_ids Kit tag IDs.
- * @param array  $fields  Kit custom fields by key, e.g. array( 'state' => 'Ohio' ). Each must exist in Kit.
+ * @param array  $fields  Kit custom fields, e.g. array( 'State' => 'Ohio' ). Keys are the field labels in Kit; each must exist there.
  * @return true|WP_Error
  */
 function fvr_kit_subscribe( string $email, string $first = '', int $form_id = 0, array $tag_ids = array(), array $fields = array() ) {

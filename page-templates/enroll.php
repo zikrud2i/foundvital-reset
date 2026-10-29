@@ -22,7 +22,7 @@ while ( have_posts() ) :
 	?>
 	<section class="section section--tight">
 		<div class="container container--narrow">
-			<?php get_template_part( 'template-parts/pricing' ); ?>
+			<?php get_template_part( 'template-parts/pricing', null, array( 'heading_level' => 2 ) ); ?>
 
 			<div class="panel">
 				<?php if ( $stripe ) : ?>

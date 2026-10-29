@@ -20,12 +20,13 @@ Plugins: Secure Custom Fields (page copy), Rank Math (SEO), Forminator (optional
 | Tab | What to enter |
 |---|---|
 | Links & checkout | Calendly URL (pre-filled), Stripe Payment Links (Reset, Clarity $100), OutfitMD shop URL, main-site URL, support email |
-| Pricing | Approved price + terms (hidden until "Show pricing block" is ticked), check-in details, Optimize terms |
+| Pricing | Approved price + terms (hidden until "Show pricing block" is ticked), check-in details, Completion Guarantee, FoundVital Sustain terms |
 | Founder & brand | Portrait, credentials, experience statement (hidden until entered), video, logo override, socials |
 | Kit & forms | Kit API key (prefer `define('FVR_KIT_API_KEY','…');` in wp-config.php), Form IDs, Tag IDs, optional Turnstile |
 | Checklist & masterclass | PDF URL, masterclass title/date/attendance/replay, "replay mode" |
-| Quiz | Go-live switch, email capture, tie-break |
-| Tracking | GTM / GA4 / Meta Pixel IDs (loaded only after cookie-banner consent) |
+| Quiz | Go-live switch, required email step (or off), tie-break |
+
+Analytics (GA4 + Search Console) is handled by the **Site Kit by Google** plugin, not the theme. The theme sends its events (quiz completion, sign-ups, bookings) to the Google tag Site Kit loads, and never sends answers or form fields. Ad pixels, if added later, must stay off the quiz, results, booking and client pages.
 
 Page copy (hero, intro, lists) is edited in each page's **SCF field groups**; defaults come from the client's messaging guide. FAQ = **Reset FAQ** menu; quiz = **Reset Quiz** menu (`Answer text | A|B|C` per line).
 
@@ -54,4 +55,4 @@ Home: "FoundVital Reset™ | 12-Week Midlife Health Coaching Program" · Checkli
 - Behind a proxy/CDN, make sure `REMOTE_ADDR` is the visitor IP (rate limiting).
 
 ## 7. QA checklist
-Mobile (360/390/768/1280): hero CTAs visible without scroll · every CTA URL · checklist & masterclass submit success/invalid email/no consent/Kit down · quiz keyboard use, no-JS fallback, all three results, tie-break, incomplete answers · Kit tags per segment · Calendly button + embed + booking event · Stripe links open hosted checkout in new tab · thank-you pages noindex · cookie banner blocks tracking until accepted · axe/WAVE pass, focus visible, reduced-motion · Lighthouse ≥90 · pricing hidden when unchecked · editor can change copy in SCF/Settings · 404 page.
+Mobile (360/390/768/1280): hero CTAs visible without scroll · every CTA URL · checklist & masterclass submit success/invalid email/no consent/Kit down · quiz keyboard use, no-JS fallback, all three results, tie-break, incomplete answers · Kit tags per segment · Calendly button + embed + booking event · Stripe links open hosted checkout in new tab · thank-you pages noindex · Site Kit events arrive in GA4 (no personal data) · axe/WAVE pass, focus visible, reduced-motion · Lighthouse ≥90 · pricing hidden when unchecked · editor can change copy in SCF/Settings · 404 page.

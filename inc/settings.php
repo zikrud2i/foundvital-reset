@@ -1,7 +1,8 @@
 <?php
 /**
  * Reset Settings: all site-wide, client-editable configuration
- * (links, Kit, Stripe, pricing, founder, masterclass, tracking) plus a launch-readiness panel.
+ * (links, Kit, Stripe, pricing, founder, masterclass) plus a launch-readiness panel.
+ * Analytics is handled by the Site Kit by Google plugin, not by the theme.
  *
  * @package foundvital-reset
  */
@@ -93,16 +94,8 @@ function fvr_settings_schema(): array {
 			'label'  => __( 'Quiz', 'fvr' ),
 			'fields' => array(
 				array( 'key' => 'quiz_live', 'label' => 'Quiz is live for the public', 'type' => 'checkbox', 'desc' => 'OFF until the client approves the questions and routing. Logged-in editors can always preview it.' ),
-				array( 'key' => 'quiz_capture', 'label' => 'Email capture on last step', 'type' => 'select', 'options' => array( 'optional' => 'Optional (with consent)', 'off' => 'Off – results only' ) ),
+				array( 'key' => 'quiz_capture', 'label' => 'Email capture on last step', 'type' => 'select', 'options' => array( 'required' => 'Required: result shown after sign-up', 'off' => 'Off – results only' ) ),
 				array( 'key' => 'quiz_tie_break', 'label' => 'Tie-break result', 'type' => 'select', 'options' => array( 'A' => 'A – Foundations', 'B' => 'B – Routine', 'C' => 'C – Coaching' ), 'desc' => 'Used when two outcomes score equally (sample default – needs client approval).' ),
-			),
-		),
-		'tracking'  => array(
-			'label'  => __( 'Tracking', 'fvr' ),
-			'fields' => array(
-				array( 'key' => 'gtm_id', 'label' => 'Google Tag Manager ID', 'type' => 'text', 'desc' => 'GTM-XXXXXXX. Loaded ONLY after the visitor accepts the consent banner.' ),
-				array( 'key' => 'ga4_id', 'label' => 'GA4 Measurement ID', 'type' => 'text', 'desc' => 'G-XXXXXXXXXX. Use this OR GTM, not both.' ),
-				array( 'key' => 'meta_pixel_id', 'label' => 'Meta Pixel ID', 'type' => 'text' ),
 			),
 		),
 	);
@@ -200,7 +193,7 @@ function fvr_pending_items(): array {
 		array( 'Quiz questions & routing approved, quiz set live', (bool) fvr_opt( 'quiz_live' ) ),
 		array( sprintf( 'FAQ answers approved (%d draft FAQ entries remain)', $faq_drafts ), 0 === $faq_drafts ),
 		array( 'Privacy Policy and Terms published (client-supplied legal text)', 0 === $legal_draft ),
-		array( 'Tracking IDs (optional) added', (bool) fvr_tracking_enabled() ),
+		array( 'Site Kit by Google installed (Analytics + Search Console)', defined( 'GOOGLESITEKIT_VERSION' ) ),
 		array( sprintf( 'Sample/dummy content replaced with approved content (%d items flagged)', count( $dummy ) ), empty( $dummy ) ),
 	);
 }

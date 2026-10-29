@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function fvr_defaults(): array {
 	return array(
 		'main_site_url'       => 'https://foundvital.com/',
-		'calendly_url'        => 'https://calendly.com/care-foundvital/30?back=1&month=2026-10',
+		'calendly_url'        => 'https://calendly.com/care-foundvital/fitcall',
 		'outfitmd_url'        => 'https://shop.foundvital.com/',
 		'lab_page_url'        => 'https://foundvital.com/lab-consultation',
 		'founder_name'        => 'Tara',
@@ -24,7 +24,7 @@ function fvr_defaults(): array {
 		'cta_primary_label'   => 'Book a Reset Fit Conversation',
 		'cta_secondary_label' => 'Take the Reset Quiz',
 		'quiz_tie_break'      => 'B',
-		'quiz_capture'        => 'optional',
+		'quiz_capture'        => 'required',
 		'clarity_test_price'  => '$99',
 		'clarity_coach_price' => '$100',
 		'clarity_total_price' => '$199',

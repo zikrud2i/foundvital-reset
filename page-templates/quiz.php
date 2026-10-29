@@ -10,7 +10,7 @@ while ( have_posts() ) :
 	the_post();
 	$questions = fvr_get_quiz_questions();
 	$total     = count( $questions );
-	$capture   = 'off' !== fvr_opt( 'quiz_capture', 'optional' );
+	$capture   = 'off' !== fvr_opt( 'quiz_capture', 'required' );
 	get_template_part(
 		'template-parts/page-hero',
 		null,
@@ -77,21 +77,22 @@ while ( have_posts() ) :
 
 					<?php if ( $capture ) : ?>
 						<fieldset class="quiz__step quiz__step--final" data-step="<?php echo esc_attr( (string) ( $total + 1 ) ); ?>">
-							<legend><span class="quiz__num"><?php esc_html_e( 'Last step (optional)', 'fvr' ); ?></span><?php esc_html_e( 'Want your result and helpful follow-up by email?', 'fvr' ); ?></legend>
-							<p class="muted"><?php esc_html_e( 'You\'ll see your result either way. If you\'d like it by email, fill in all three fields below and we\'ll send tips matched to your result. We only record which result you received, never your individual answers.', 'fvr' ); ?></p>
+							<legend><span class="quiz__num"><?php esc_html_e( 'Last step', 'fvr' ); ?></span><?php esc_html_e( 'Where should we send your result?', 'fvr' ); ?></legend>
+							<p class="muted"><?php esc_html_e( 'Enter your details to see your result. We\'ll also email it to you with tips matched to your result. We only record which result you received, never your individual answers.', 'fvr' ); ?></p>
+							<?php fvr_required_note(); ?>
 							<p class="field__error" id="quiz-caperr" role="alert" hidden></p>
 							<div class="field">
-								<label for="quiz-fn"><?php esc_html_e( 'First name', 'fvr' ); ?> <span class="req">*</span></label>
-								<input id="quiz-fn" type="text" name="first_name" autocomplete="given-name" maxlength="60">
+								<label for="quiz-fn"><?php esc_html_e( 'First name', 'fvr' ); ?> <span class="req" aria-hidden="true">*</span></label>
+								<input id="quiz-fn" type="text" name="first_name" autocomplete="given-name" maxlength="60" required>
 							</div>
 							<div class="field">
-								<label for="quiz-em"><?php esc_html_e( 'Email address', 'fvr' ); ?> <span class="req">*</span></label>
-								<input id="quiz-em" type="email" name="email" autocomplete="email">
+								<label for="quiz-em"><?php esc_html_e( 'Email address', 'fvr' ); ?> <span class="req" aria-hidden="true">*</span></label>
+								<input id="quiz-em" type="email" name="email" autocomplete="email" required>
 							</div>
 							<?php fvr_state_field( 'quiz' ); ?>
 							<div class="field field--check">
-								<input id="quiz-co" type="checkbox" name="consent" value="1">
-								<label for="quiz-co"><?php esc_html_e( 'Yes, email me my result and occasional education and updates from FoundVital. I can unsubscribe at any time.', 'fvr' ); ?></label>
+								<input id="quiz-co" type="checkbox" name="consent" value="1" required>
+								<label for="quiz-co"><?php esc_html_e( 'Yes, email me my result and occasional education and updates from FoundVital. I can unsubscribe at any time.', 'fvr' ); ?> <span class="req" aria-hidden="true">*</span></label>
 							</div>
 						</fieldset>
 					<?php endif; ?>

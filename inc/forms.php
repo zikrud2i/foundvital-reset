@@ -79,7 +79,7 @@ function fvr_posted_state(): string {
 function fvr_state_field( string $suffix ): void {
 	?>
 	<div class="field">
-		<label for="fvr-st-<?php echo esc_attr( $suffix ); ?>"><?php esc_html_e( 'State of residence', 'fvr' ); ?> <span class="req">*</span></label>
+		<label for="fvr-st-<?php echo esc_attr( $suffix ); ?>"><?php esc_html_e( 'State of residence', 'fvr' ); ?> <span class="req" aria-hidden="true">*</span></label>
 		<select id="fvr-st-<?php echo esc_attr( $suffix ); ?>" name="state" autocomplete="address-level1" required aria-describedby="fvr-sterr-<?php echo esc_attr( $suffix ); ?>">
 			<option value=""><?php esc_html_e( 'Select your state', 'fvr' ); ?></option>
 			<?php foreach ( fvr_us_states() as $st ) : ?>
@@ -89,6 +89,11 @@ function fvr_state_field( string $suffix ): void {
 		<p class="field__error" id="fvr-sterr-<?php echo esc_attr( $suffix ); ?>" role="alert" hidden></p>
 	</div>
 	<?php
+}
+
+/** Explains the asterisk; shown at the top of every sign-up form. */
+function fvr_required_note(): void {
+	echo '<p class="form__required">' . esc_html__( 'Fields marked with an asterisk (*) are required.', 'fvr' ) . '</p>';
 }
 
 /** Line shown under every sign-up form. Links to the policy once it is published. */
@@ -122,21 +127,22 @@ function fvr_lead_form( string $type, string $button, string $consent = '' ): vo
 	echo '<input type="hidden" name="action" value="fvr_subscribe"><input type="hidden" name="fvr_type" value="' . esc_attr( $type ) . '"><input type="hidden" name="fvr_return" value="' . esc_attr( (string) get_the_ID() ) . '">';
 	wp_nonce_field( 'fvr_subscribe_' . $type, '_fvr_nonce' );
 	fvr_spam_fields();
+	fvr_required_note();
 	?>
 	<div class="field">
-		<label for="fvr-fn-<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'First name', 'fvr' ); ?> <span class="req">*</span></label>
+		<label for="fvr-fn-<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'First name', 'fvr' ); ?> <span class="req" aria-hidden="true">*</span></label>
 		<input id="fvr-fn-<?php echo esc_attr( $type ); ?>" type="text" name="first_name" autocomplete="given-name" maxlength="60" required aria-describedby="fvr-fnerr-<?php echo esc_attr( $type ); ?>">
 		<p class="field__error" id="fvr-fnerr-<?php echo esc_attr( $type ); ?>" role="alert" hidden></p>
 	</div>
 	<div class="field">
-		<label for="fvr-em-<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Email address', 'fvr' ); ?> <span class="req">*</span></label>
+		<label for="fvr-em-<?php echo esc_attr( $type ); ?>"><?php esc_html_e( 'Email address', 'fvr' ); ?> <span class="req" aria-hidden="true">*</span></label>
 		<input id="fvr-em-<?php echo esc_attr( $type ); ?>" type="email" name="email" autocomplete="email" required aria-describedby="fvr-err-<?php echo esc_attr( $type ); ?>">
 		<p class="field__error" id="fvr-err-<?php echo esc_attr( $type ); ?>" role="alert" hidden></p>
 	</div>
 	<?php fvr_state_field( $type ); ?>
 	<div class="field field--check">
 		<input id="fvr-co-<?php echo esc_attr( $type ); ?>" type="checkbox" name="consent" value="1" required>
-		<label for="fvr-co-<?php echo esc_attr( $type ); ?>"><?php echo esc_html( $consent ); ?></label>
+		<label for="fvr-co-<?php echo esc_attr( $type ); ?>"><?php echo esc_html( $consent ); ?> <span class="req" aria-hidden="true">*</span></label>
 	</div>
 	<button class="btn btn--primary btn--block" type="submit"><span><?php echo esc_html( $button ); ?></span><?php echo fvr_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
 	<?php
@@ -181,7 +187,7 @@ function fvr_handle_subscribe(): void {
 		$first,
 		(int) fvr_opt( 'kit_form_' . $type ),
 		array( (int) fvr_opt( 'kit_tag_' . $type ) ),
-		array( 'state' => $state )
+		array( 'State' => $state )
 	);
 	if ( is_wp_error( $result ) ) {
 		fvr_redirect_error( 'kit_unconfigured' === $result->get_error_code() ? 'config' : 'kit' );

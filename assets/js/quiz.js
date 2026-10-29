@@ -66,18 +66,15 @@
 		for (var k = 0; k < questions; k++) {
 			if (!answered(steps[k])) { e.preventDefault(); show(k, true); var err = steps[k].querySelector('.field__error'); if (err) { err.hidden = false; } return; }
 		}
-		/* Signing up is optional, but once any detail is filled in, all of them (and consent) are required. */
+		/* The email step is required: first name, email, state and consent before the result is shown. */
 		var fn = form.querySelector('#quiz-fn'), em = form.querySelector('#quiz-em'), st = form.querySelector('#fvr-st-quiz'), co = form.querySelector('#quiz-co');
 		var capErr = form.querySelector('#quiz-caperr');
 		if (!em || !fn || !st || !co) { return; }
-		var any = fn.value.trim() || em.value.trim() || st.value;
 		var gap = null, msg = '';
-		if (any) {
-			if (!fn.value.trim()) { gap = fn; msg = 'Please enter your first name.'; }
-			else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value)) { gap = em; msg = 'Please enter a valid email address.'; }
-			else if (!st.value) { gap = st; msg = 'Please choose your state of residence.'; }
-			else if (!co.checked) { gap = co; msg = 'Please tick the consent box so we can email you, or clear the fields to skip.'; }
-		}
+		if (!fn.value.trim()) { gap = fn; msg = 'Please enter your first name.'; }
+		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value)) { gap = em; msg = 'Please enter a valid email address.'; }
+		else if (!st.value) { gap = st; msg = 'Please choose your state of residence.'; }
+		else if (!co.checked) { gap = co; msg = 'Please tick the consent box so we can email you your result.'; }
 		[fn, em, st].forEach(function (f) { if (f === gap) { f.setAttribute('aria-invalid', 'true'); } else { f.removeAttribute('aria-invalid'); } });
 		if (capErr) { capErr.textContent = msg; capErr.hidden = !msg; }
 		if (gap) { e.preventDefault(); show(total - 1, false); gap.focus(); }

@@ -1,4 +1,4 @@
-/* FoundVital Reset – site behaviour: nav, reveal, consent-gated tracking, Calendly, form hints. */
+/* FoundVital Reset – site behaviour: nav, reveal, event tracking, Calendly, form hints. */
 (function () {
 	'use strict';
 	var FVR = window.FVR || {};
@@ -11,63 +11,14 @@
 	}
 	function delCookie(name) { doc.cookie = name + '=; Max-Age=0; path=/; SameSite=Lax'; }
 
-	/* ---------- Analytics (dataLayer always; vendor scripts only after consent) ---------- */
+	/* ---------- Analytics: events go to the Google tag that Site Kit loads (no tags loaded by the theme) ---------- */
 	window.dataLayer = window.dataLayer || [];
-	var consent = safe(function () { return localStorage.getItem('fvr_consent'); });
 
 	function track(name, params) {
-		var payload = Object.assign({ event: name }, params || {});
-		window.dataLayer.push(payload);
-		if (consent === 'granted') {
-			if (FVR.ga4 && typeof window.gtag === 'function') { window.gtag('event', name, params || {}); }
-			if (FVR.pixel && typeof window.fbq === 'function') { window.fbq('trackCustom', name, params || {}); }
-		}
+		window.dataLayer.push(Object.assign({ event: name }, params || {}));
+		if (typeof window.gtag === 'function') { window.gtag('event', name, params || {}); }
 	}
 	window.fvrTrack = track;
-
-	function loadTracking() {
-		if (loadTracking.done || !FVR.tracking) { return; }
-		loadTracking.done = true;
-		function add(src) { var s = doc.createElement('script'); s.async = true; s.src = src; doc.head.appendChild(s); }
-		if (FVR.gtm) {
-			window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
-			add('https://www.googletagmanager.com/gtm.js?id=' + encodeURIComponent(FVR.gtm));
-		} else if (FVR.ga4) {
-			window.gtag = function () { window.dataLayer.push(arguments); };
-			window.gtag('js', new Date());
-			window.gtag('config', FVR.ga4, { anonymize_ip: true });
-			add('https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(FVR.ga4));
-		}
-		if (FVR.pixel) {
-			/* Standard Meta Pixel bootstrap */
-			(function (f, b, e, v, n, t, s) {
-				if (f.fbq) { return; }
-				n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
-				if (!f._fbq) { f._fbq = n; }
-				n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
-				t = b.createElement(e); t.async = true; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
-			})(window, doc, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-			window.fbq('init', FVR.pixel);
-			window.fbq('track', 'PageView');
-		}
-	}
-
-	var banner = doc.getElementById('consent-banner');
-	function setConsent(v) {
-		consent = v;
-		safe(function () { localStorage.setItem('fvr_consent', v); });
-		if (banner) { banner.hidden = true; }
-		if (v === 'granted') { loadTracking(); }
-	}
-	if (FVR.tracking) {
-		if (consent === 'granted') { loadTracking(); }
-		else if (!consent && banner) { banner.hidden = false; }
-		doc.addEventListener('click', function (e) {
-			var b = e.target.closest('[data-consent]');
-			if (b) { setConsent(b.getAttribute('data-consent')); }
-			if (e.target.closest('[data-consent-open]') && banner) { banner.hidden = false; }
-		});
-	}
 
 	/* ---------- Campaign attribution (session only, appended to Calendly links) ---------- */
 	var utm = {};

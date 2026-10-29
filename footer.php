@@ -75,22 +75,9 @@ $socials = array(
 				}
 			}
 			?>
-			<?php if ( fvr_tracking_enabled() ) : ?>
-				<li><button type="button" class="link-btn" data-consent-open><?php esc_html_e( 'Cookie preferences', 'fvr' ); ?></button></li>
-			<?php endif; ?>
 		</ul>
 	</div>
 </footer>
-
-<?php if ( fvr_tracking_enabled() ) : ?>
-<div class="consent" id="consent-banner" role="region" aria-label="<?php esc_attr_e( 'Cookie consent', 'fvr' ); ?>" hidden>
-	<p><?php esc_html_e( 'We\'d like to use analytics and advertising cookies to understand which pages are helpful. They only load if you accept.', 'fvr' ); ?><?php echo fvr_privacy_link(); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
-	<div class="consent__actions">
-		<button type="button" class="btn btn--primary btn--sm" data-consent="granted"><span><?php esc_html_e( 'Accept', 'fvr' ); ?></span></button>
-		<button type="button" class="btn btn--ghost btn--sm" data-consent="denied"><span><?php esc_html_e( 'Decline', 'fvr' ); ?></span></button>
-	</div>
-</div>
-<?php endif; ?>
 
 <?php wp_footer(); ?>
 </body>

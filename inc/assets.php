@@ -15,11 +15,6 @@ function fvr_asset_ver( string $rel ): string {
 	return FVR_VERSION . '.' . ( file_exists( $file ) ? (string) filemtime( $file ) : '0' );
 }
 
-/** True when any tracking ID is configured (drives the consent banner). */
-function fvr_tracking_enabled(): bool {
-	return (bool) ( fvr_opt( 'gtm_id' ) || fvr_opt( 'ga4_id' ) || fvr_opt( 'meta_pixel_id' ) );
-}
-
 add_action(
 	'wp_enqueue_scripts',
 	static function () {
@@ -36,10 +31,6 @@ add_action(
 			'fvr-main',
 			'FVR',
 			array(
-				'tracking'     => fvr_tracking_enabled(),
-				'gtm'          => (string) fvr_opt( 'gtm_id' ),
-				'ga4'          => (string) fvr_opt( 'ga4_id' ),
-				'pixel'        => (string) fvr_opt( 'meta_pixel_id' ),
 				'fitThanksUrl' => fvr_thanks_url( 'fit-call' ),
 				'calendlyOn'   => (bool) fvr_opt( 'calendly_redirect_on_book' ),
 			)

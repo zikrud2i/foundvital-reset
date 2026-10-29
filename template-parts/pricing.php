@@ -1,14 +1,16 @@
 <?php
 /**
  * Pricing block. Visible only when "Show pricing block" is on AND an approved price is entered.
+ * Pass array( 'heading_level' => 2 ) when the block sits directly under the page's h1.
  *
  * @package foundvital-reset
  */
 
-$show     = (bool) fvr_opt( 'price_show' ) && fvr_opt( 'price_text' );
-$terms    = fvr_lines( fvr_opt( 'price_terms' ) );
+$show      = (bool) fvr_opt( 'price_show' ) && fvr_opt( 'price_text' );
+$terms     = fvr_lines( fvr_opt( 'price_terms' ) );
 $optimize  = fvr_lines( fvr_opt( 'optimize_terms' ) );
 $guarantee = (string) fvr_opt( 'guarantee_text' );
+$hn        = 'h' . ( isset( $args['heading_level'] ) && 2 === (int) $args['heading_level'] ? 2 : 3 );
 ?>
 <div class="pricing reveal" id="investment">
 	<?php if ( $show ) : ?>
@@ -31,14 +33,14 @@ $guarantee = (string) fvr_opt( 'guarantee_text' );
 
 	<?php if ( $guarantee ) : ?>
 		<div class="callout">
-			<h4><?php esc_html_e( 'Completion Guarantee', 'fvr' ); ?></h4>
+			<<?php echo esc_attr( $hn ); ?> class="callout__title"><?php esc_html_e( 'Completion Guarantee', 'fvr' ); ?></<?php echo esc_attr( $hn ); ?>>
 			<p><?php echo esc_html( $guarantee ); ?></p>
 		</div>
 	<?php endif; ?>
 
 	<?php if ( $optimize ) : ?>
 		<div class="callout">
-			<h4><?php esc_html_e( 'FoundVital Sustain™', 'fvr' ); ?></h4>
+			<<?php echo esc_attr( $hn ); ?> class="callout__title"><?php esc_html_e( 'FoundVital Sustain™', 'fvr' ); ?></<?php echo esc_attr( $hn ); ?>>
 			<ul class="check-list check-list--small">
 				<?php foreach ( $optimize as $t ) : ?>
 					<li><?php echo fvr_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php echo esc_html( $t ); ?></span></li>
