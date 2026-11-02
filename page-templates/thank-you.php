@@ -38,7 +38,7 @@ while ( have_posts() ) :
 				<?php if ( 'checklist' === $type ) : ?>
 					<?php if ( fvr_opt( 'checklist_url' ) ) : ?>
 						<p><?php esc_html_e( 'Your checklist is ready to download.', 'fvr' ); ?></p>
-						<?php fvr_btn( __( 'Download the Checklist', 'fvr' ), (string) fvr_opt( 'checklist_url' ), 'primary', 'checklist_download_click' ); ?>
+						<?php fvr_btn( __( 'Download the Checklist (PDF)', 'fvr' ), (string) fvr_opt( 'checklist_url' ), 'primary', 'checklist_download_click' ); ?>
 					<?php else : ?>
 						<p><?php esc_html_e( 'Please check your inbox for an email with your checklist. If it doesn\'t arrive in a few minutes, check your spam or promotions folder.', 'fvr' ); ?></p>
 						<?php fvr_pending( 'Confirm Kit delivers the checklist by email, or add the download URL in Reset Settings > Checklist & masterclass.' ); ?>
