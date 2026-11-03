@@ -68,7 +68,7 @@ $socials = array(
 		<p>© <?php echo esc_html( gmdate( 'Y' ) ); ?> FoundVital. <?php esc_html_e( 'All rights reserved.', 'fvr' ); ?> <?php esc_html_e( 'Developed by', 'fvr' ); ?> <a href="https://d2itechnology.com/" target="_blank" rel="noopener">D2i Technology</a></p>
 		<ul class="legal-list">
 			<?php
-			foreach ( array( 'privacy-policy' => 'Privacy Policy', 'terms' => 'Terms' ) as $slug => $label ) {
+			foreach ( array( 'privacy-policy' => 'Privacy Policy', 'enrollment-terms' => 'Enrollment Terms', 'terms' => 'Terms' ) as $slug => $label ) {
 				$p = get_page_by_path( $slug );
 				if ( $p && 'publish' === $p->post_status ) {
 					echo '<li><a href="' . esc_url( get_permalink( $p ) ) . '">' . esc_html( $label ) . '</a></li>';

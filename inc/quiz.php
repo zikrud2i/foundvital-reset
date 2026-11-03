@@ -55,6 +55,33 @@ function fvr_get_quiz_questions(): array {
 	return $out;
 }
 
+/**
+ * Robin's routing: most answers wins. On a tie, use the Q7 answer if it is one of the tied results
+ * (the last question if there are fewer than 7), then the Q1 answer, then Foundations, Routine, Coaching.
+ *
+ * @param array<string,int> $tally A/B/C counts.
+ * @param string[]          $picks Result key chosen in each question, in order.
+ */
+function fvr_quiz_winner( array $tally, array $picks ): string {
+	$max  = max( $tally );
+	$tied = array_keys( array_filter( $tally, static fn( $n ) => $n === $max ) );
+	if ( 1 === count( $tied ) ) {
+		return $tied[0];
+	}
+	$q7 = $picks[ min( 6, count( $picks ) - 1 ) ] ?? '';
+	foreach ( array( $q7, $picks[0] ?? '' ) as $pick ) {
+		if ( in_array( $pick, $tied, true ) ) {
+			return $pick;
+		}
+	}
+	foreach ( array( 'A', 'B', 'C' ) as $key ) {
+		if ( in_array( $key, $tied, true ) ) {
+			return $key;
+		}
+	}
+	return 'A';
+}
+
 /** Public visibility gate: live flag, or an editor previewing. */
 function fvr_quiz_visible(): bool {
 	return (bool) fvr_opt( 'quiz_live' ) || current_user_can( 'edit_pages' );
@@ -80,18 +107,16 @@ function fvr_handle_quiz(): void {
 	}
 
 	$tally = array( 'A' => 0, 'B' => 0, 'C' => 0 );
+	$picks = array(); // Result key chosen in each question, in question order.
 	foreach ( $questions as $qid => $q ) {
 		if ( ! isset( $given[ $qid ] ) || ! isset( $q['answers'][ $given[ $qid ] ] ) ) {
 			fvr_redirect_error( 'quizmiss', 'quiz' );
 		}
-		++$tally[ $q['answers'][ $given[ $qid ] ]['key'] ];
+		$picks[] = $q['answers'][ $given[ $qid ] ]['key'];
+		++$tally[ end( $picks ) ];
 	}
 
-	$max        = max( $tally );
-	$candidates = array_keys( array_filter( $tally, static fn( $n ) => $n === $max ) );
-	$tie        = (string) fvr_opt( 'quiz_tie_break', 'B' );
-	$winner     = ( count( $candidates ) > 1 && in_array( $tie, $candidates, true ) ) ? $tie : $candidates[0];
-	$result     = fvr_quiz_results()[ $winner ];
+	$result = fvr_quiz_results()[ fvr_quiz_winner( $tally, $picks ) ];
 
 	// Required email step: the result is only shown once first name, email, state and consent are given.
 	// Only the result category is sent to Kit (as a tag), never answers. A Kit outage still shows the result.
@@ -117,7 +142,7 @@ function fvr_handle_quiz(): void {
 			$first,
 			(int) fvr_opt( 'kit_form_quiz' ),
 			array( (int) fvr_opt( 'kit_tag_quiz_any' ), (int) fvr_opt( $result['tag'] ) ),
-			array( 'State' => $state )
+			array( 'state' => $state )
 		);
 		$sub_flag = is_wp_error( $r ) ? 'failed' : 'ok';
 	}

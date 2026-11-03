@@ -20,11 +20,11 @@ Plugins: Secure Custom Fields (page copy), Rank Math (SEO), Forminator (optional
 | Tab | What to enter |
 |---|---|
 | Links & checkout | Calendly URL (pre-filled), Stripe Payment Links (Reset, Clarity $100), OutfitMD shop URL, support email |
-| Pricing | Approved price + terms (hidden until "Show pricing block" is ticked), check-in details, Completion Guarantee, FoundVital Sustain terms |
+| Pricing | Approved price + terms (hidden until "Show pricing block" is ticked), check-in details, Completion Bonus, FoundVital Sustain description, pricing and bullets |
 | Founder & brand | Portrait, credentials, experience statement (hidden until entered), video, logo override, socials |
 | Kit & forms | Kit API key (prefer `define('FVR_KIT_API_KEY','…');` in wp-config.php), Form IDs, Tag IDs, optional Turnstile |
 | Checklist & masterclass | PDF URL, masterclass title/date/attendance/replay, "replay mode" |
-| Quiz | Go-live switch, required email step (or off), tie-break |
+| Quiz | Go-live switch, required email step (or off). Ties follow Robin's rules (Q7, then Q1, then Foundations > Routine > Coaching) |
 
 Analytics (GA4 + Search Console) is handled by the **Site Kit by Google** plugin, not the theme. The theme sends its events (quiz completion, sign-ups, bookings) to the Google tag Site Kit loads, and never sends answers or form fields. Ad pixels, if added later, must stay off the quiz, results, booking and client pages.
 

@@ -109,7 +109,7 @@ function fvr_is_noindex_page(): bool {
 	if ( ! is_page() ) {
 		return is_404() || is_search();
 	}
-	return is_page_template( array( 'page-templates/thank-you.php', 'page-templates/quiz-result.php', 'page-templates/enroll.php' ) );
+	return is_page_template( array( 'page-templates/thank-you.php', 'page-templates/quiz-result.php', 'page-templates/enroll.php', 'page-templates/assessment.php' ) );
 }
 
 add_filter(
@@ -122,6 +122,22 @@ add_filter(
 		}
 		return $robots;
 	}
+);
+
+/** Rank Math: leave noindex pages out of the sitemap, too. */
+add_filter(
+	'rank_math/sitemap/entry',
+	static function ( $url, $type, $post ) {
+		if ( 'post' === $type && $post instanceof WP_Post && 'page' === $post->post_type ) {
+			$tpl = get_page_template_slug( $post );
+			if ( in_array( $tpl, array( 'page-templates/thank-you.php', 'page-templates/quiz-result.php', 'page-templates/enroll.php', 'page-templates/assessment.php' ), true ) ) {
+				return false;
+			}
+		}
+		return $url;
+	},
+	10,
+	3
 );
 
 /** Rank Math: keep its robots meta consistent with ours. */

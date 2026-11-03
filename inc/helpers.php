@@ -22,11 +22,15 @@ function fvr_defaults(): array {
 		'founder_credentials' => 'PA-C, DipACLM',
 		'cta_primary_label'   => 'Book a Reset Fit Conversation',
 		'cta_secondary_label' => 'Take the Reset Quiz',
-		'quiz_tie_break'      => 'B',
 		'quiz_capture'        => 'required',
 		'clarity_test_price'  => '$99',
 		'clarity_coach_price' => '$100',
 		'clarity_total_price' => '$199',
+		'meta_pixel_id'       => '1694189971755179',
+		'bonus_text'          => 'Complete your 12-week Reset and attend at least 4 of your 5 coaching check-ins to receive your first month of FoundVital Sustain™ at no additional cost. After that month, choose a monthly or annual Sustain membership if you\'d like to continue.',
+		'sustain_desc'        => 'FoundVital Sustain™ offers continued support after Reset: one live group Q&A with Tara each month (recorded for replay), continued midlife health education plus training and nutrition guidance in the education library, and the private member community on Circle.',
+		'sustain_price'       => '$99 per month, billed monthly. Terms apply. Or $999 per year, paid up front, a savings of $189. Annual payments are nonrefundable; you can turn off renewal anytime and keep access through the end of your paid year.',
+		'sustain_points'      => 'Optional continuation after week 12 for people who want ongoing support',
 		'footer_disclaimer'   => 'FoundVital Reset is non-medical health coaching and education. It is not a diagnostic, treatment, or medication-access service, and it does not replace care from your licensed healthcare provider.',
 	);
 }

@@ -36,9 +36,8 @@ while ( have_posts() ) :
 				<h2 class="h3"><?php echo esc_html( $c[1] ); ?></h2>
 
 				<?php if ( 'checklist' === $type ) : ?>
-					<?php if ( fvr_opt( 'checklist_url' ) ) : ?>
-						<p><?php esc_html_e( 'Your checklist is ready to download.', 'fvr' ); ?></p>
-						<?php fvr_btn( __( 'Download the Checklist (PDF)', 'fvr' ), (string) fvr_opt( 'checklist_url' ), 'primary', 'checklist_download_click' ); ?>
+					<?php if ( fvr_checklist_pdf_url() ) : ?>
+						<?php fvr_checklist_success(); ?>
 					<?php else : ?>
 						<p><?php esc_html_e( 'Please check your inbox for an email with your checklist. If it doesn\'t arrive in a few minutes, check your spam or promotions folder.', 'fvr' ); ?></p>
 						<?php fvr_pending( 'Confirm Kit delivers the checklist by email, or add the download URL in Reset Settings > Checklist & masterclass.' ); ?>
@@ -72,13 +71,13 @@ while ( have_posts() ) :
 			<?php if ( 'fit-call' !== $type && 'enrollment' !== $type ) : ?>
 				<div class="next-grid">
 					<?php if ( 'checklist' === $type ) : ?>
-						<a class="next-card" href="<?php echo esc_url( fvr_page_url( 'quiz' ) ); ?>"><strong><?php esc_html_e( 'Take the quiz', 'fvr' ); ?></strong><span><?php esc_html_e( 'Find your best next step.', 'fvr' ); ?></span></a>
+						<a class="next-card next-card--quiz" href="<?php echo esc_url( fvr_page_url( 'quiz' ) ); ?>"><strong><?php esc_html_e( 'Take the quiz', 'fvr' ); ?></strong><span><?php esc_html_e( 'Find your best next step.', 'fvr' ); ?></span></a>
 						<?php $mc = get_page_by_path( 'masterclass' ); ?>
 						<?php if ( $mc && 'publish' === $mc->post_status ) : ?>
 							<a class="next-card" href="<?php echo esc_url( fvr_page_url( 'masterclass' ) ); ?>"><strong><?php esc_html_e( 'Free masterclass', 'fvr' ); ?></strong><span><?php esc_html_e( 'What to prioritize now.', 'fvr' ); ?></span></a>
 						<?php endif; ?>
 					<?php endif; ?>
-					<a class="next-card" href="<?php echo esc_url( fvr_page_url( 'fit-call' ) ); ?>"><strong><?php esc_html_e( 'Book a fit conversation', 'fvr' ); ?></strong><span><?php esc_html_e( 'Ask questions about Reset.', 'fvr' ); ?></span></a>
+					<a class="next-card next-card--fit" href="<?php echo esc_url( fvr_page_url( 'fit-call' ) ); ?>"><strong><?php esc_html_e( 'Book a fit conversation', 'fvr' ); ?></strong><span><?php esc_html_e( 'Ask questions about Reset.', 'fvr' ); ?></span></a>
 				</div>
 			<?php endif; ?>
 

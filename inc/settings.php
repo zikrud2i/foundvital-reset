@@ -24,6 +24,7 @@ function fvr_settings_schema(): array {
 				array( 'key' => 'stripe_clarity_url', 'label' => 'Stripe Payment Link – Clarity Coaching ($100)', 'type' => 'url', 'desc' => 'FoundVital collects ONLY the coaching payment here.' ),
 				array( 'key' => 'outfitmd_url', 'label' => 'OutfitMD affiliate shop URL ($99 testing)', 'type' => 'url', 'desc' => 'External purchase. FoundVital does not collect this payment.' ),
 				array( 'key' => 'lab_page_url', 'label' => 'Clarity Coaching page URL (if hosted on foundvital.com)', 'type' => 'url', 'desc' => 'Architecture decision pending. Leave as the proposed foundvital.com URL, or point to this site\'s /clarity-coaching page.' ),
+				array( 'key' => 'meta_pixel_id', 'label' => 'Meta Pixel ID', 'type' => 'id', 'desc' => 'Loads ONLY on the home page and /checklist/ (PageView, plus one Lead after a checklist sign-up). Blank = off.' ),
 				array( 'key' => 'support_email', 'label' => 'Support / contact email', 'type' => 'email', 'desc' => 'Optional. Shown on confirmation pages when set.' ),
 			),
 		),
@@ -34,8 +35,10 @@ function fvr_settings_schema(): array {
 				array( 'key' => 'price_text', 'label' => 'Price', 'type' => 'text', 'desc' => 'Exactly as approved, shown as the headline of the pricing card. No guessed amounts.' ),
 				array( 'key' => 'price_terms', 'label' => 'Payment options & terms', 'type' => 'textarea', 'desc' => 'One item per line (payment options, full financial obligation, refund/program terms). Only enter approved terms.' ),
 				array( 'key' => 'checkin_details', 'label' => 'Coaching check-in details', 'type' => 'textarea', 'desc' => 'Confirmed frequency, format, provider and between-check-in support. One item per line. Do not imply unlimited or concierge access.' ),
-				array( 'key' => 'guarantee_text', 'label' => 'Completion Guarantee', 'type' => 'textarea', 'desc' => 'Shown under the price with the heading "Completion Guarantee". Hidden when blank.' ),
-				array( 'key' => 'optimize_terms', 'label' => 'FoundVital Sustain™ membership terms', 'type' => 'textarea', 'desc' => 'Approved terms only. Hidden when blank.' ),
+				array( 'key' => 'bonus_text', 'label' => 'Completion Bonus', 'type' => 'textarea', 'desc' => 'Shown under the price with the heading "Completion Bonus". Hidden when blank.' ),
+				array( 'key' => 'sustain_desc', 'label' => 'FoundVital Sustain™ description', 'type' => 'textarea' ),
+				array( 'key' => 'sustain_price', 'label' => 'FoundVital Sustain™ pricing text', 'type' => 'textarea' ),
+				array( 'key' => 'sustain_points', 'label' => 'FoundVital Sustain™ bullet points', 'type' => 'textarea', 'desc' => 'Approved terms only, one per line. Hidden when blank.' ),
 				array( 'key' => 'clarity_test_price', 'label' => 'Clarity: testing price (OutfitMD)', 'type' => 'text' ),
 				array( 'key' => 'clarity_coach_price', 'label' => 'Clarity: coaching price (FoundVital Stripe)', 'type' => 'text' ),
 				array( 'key' => 'clarity_total_price', 'label' => 'Clarity: combined total', 'type' => 'text' ),
@@ -81,7 +84,7 @@ function fvr_settings_schema(): array {
 		'checklist' => array(
 			'label'  => __( 'Checklist & masterclass', 'fvr' ),
 			'fields' => array(
-				array( 'key' => 'checklist_url', 'label' => 'Checklist download URL', 'type' => 'url', 'desc' => 'PDF in the Media Library or hosted file. Blank = delivery by email (Kit).' ),
+				array( 'key' => 'checklist_url', 'label' => 'Checklist PDF (Media Library URL)', 'type' => 'url', 'desc' => 'Visitors always download it from /downloads/seven-questions-checklist.pdf (that address never changes). Blank = the PDF bundled with the theme.' ),
 				array( 'key' => 'mc_title', 'label' => 'Masterclass title', 'type' => 'text', 'desc' => 'Blank uses the title from the messaging guide.' ),
 				array( 'key' => 'mc_datetime', 'label' => 'Date & time (display text)', 'type' => 'text', 'desc' => 'e.g. "Thursday, Nov 12 · 12:00 PM ET". Do not enter until scheduled.' ),
 				array( 'key' => 'mc_join_url', 'label' => 'Webinar attendance link', 'type' => 'url', 'desc' => 'Shown on the registration thank-you page. Anyone who finds the page can see it – use a registration-gated link if possible.' ),
@@ -94,7 +97,6 @@ function fvr_settings_schema(): array {
 			'fields' => array(
 				array( 'key' => 'quiz_live', 'label' => 'Quiz is live for the public', 'type' => 'checkbox', 'desc' => 'OFF until the client approves the questions and routing. Logged-in editors can always preview it.' ),
 				array( 'key' => 'quiz_capture', 'label' => 'Email capture on last step', 'type' => 'select', 'options' => array( 'required' => 'Required: result shown after sign-up', 'off' => 'Off – results only' ) ),
-				array( 'key' => 'quiz_tie_break', 'label' => 'Tie-break result', 'type' => 'select', 'options' => array( 'A' => 'A – Foundations', 'B' => 'B – Routine', 'C' => 'C – Coaching' ), 'desc' => 'Used when two outcomes score equally (sample default – needs client approval).' ),
 			),
 		),
 	);

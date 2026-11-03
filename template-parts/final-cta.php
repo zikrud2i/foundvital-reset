@@ -6,7 +6,7 @@
  */
 
 $heading = fvr_field( 'final_heading', 'Your next chapter doesn\'t need another complicated plan.' );
-$text    = fvr_field( 'final_text', 'If you\'re looking for a more structured way to approach nutrition, strength, recovery, and everyday habits, Reset may be a good next step. A fit conversation gives you time to ask questions and decide whether the experience matches what you\'re looking for.' );
+$text    = fvr_field( 'final_text', 'If you\'re looking for a more structured way to approach nutrition, strength, recovery and everyday habits, especially through perimenopause and menopause, Reset may be a good next step. A fit conversation gives you time to ask questions and decide whether the experience matches what you\'re looking for.' );
 ?>
 <section class="cta-band" aria-labelledby="final-title">
 	<div class="container container--narrow text-center reveal">
@@ -18,6 +18,5 @@ $text    = fvr_field( 'final_text', 'If you\'re looking for a more structured wa
 			fvr_quiz_btn( 'light', __( 'Not Ready Yet? Take the Reset Quiz', 'fvr' ), 'cta_quiz_final' );
 			?>
 		</div>
-		<p class="cta-band__note"><?php esc_html_e( 'No pressure. Decide on your own timeline.', 'fvr' ); ?></p>
 	</div>
 </section>

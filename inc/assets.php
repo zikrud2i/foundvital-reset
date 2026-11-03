@@ -70,3 +70,32 @@ add_action(
 		}
 	}
 );
+
+/**
+ * Meta Pixel: home page and /checklist/ ONLY (never quiz, results, booking, legal, client or payment pages).
+ * PageView here; the single "Lead" (no parameters) fires in main.js after a confirmed checklist sign-up.
+ * autoConfig is off so Meta never reads buttons or form fields on its own.
+ */
+function fvr_pixel_page(): bool {
+	return is_front_page() || ( is_page() && 'checklist' === get_page_uri( get_queried_object_id() ) );
+}
+
+add_action(
+	'wp_head',
+	static function () {
+		$id = preg_replace( '/\D+/', '', (string) fvr_opt( 'meta_pixel_id' ) );
+		if ( ! $id || ! fvr_pixel_page() ) {
+			return;
+		}
+		?>
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('set','autoConfig',false,'<?php echo esc_js( $id ); ?>');
+fbq('init','<?php echo esc_js( $id ); ?>');
+fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=<?php echo esc_attr( $id ); ?>&amp;ev=PageView&amp;noscript=1"></noscript>
+		<?php
+	},
+	20
+);

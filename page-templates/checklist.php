@@ -9,7 +9,12 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 	$benefits = fvr_lines( fvr_field( 'page_points', "Clear priorities across nutrition, strength, recovery, and everyday habits\nA practical starting point you can use on your own\nSimple ways to decide what to focus on first" ) );
-	$inside   = fvr_lines( fvr_field( 'page_extra', '' ) );
+	$inside   = fvr_lines( fvr_field( 'page_extra', "What am I actually hoping to make easier?\nWhat's already working, and worth keeping?\nWhat advice have I collected but not really made my own?\nWhich topic do I most want to learn about next?\nWhat tends to throw my routine off?\nWhat's one commitment that could fit my ordinary week?\nWhat kind of support would help me follow through?" ) );
+	$prev_id  = (int) fvr_field( 'page_preview_image', 0 );
+	$preview  = $prev_id ? fvr_attachment( $prev_id, 'large', array( 'class' => 'checklist-preview__img', 'loading' => 'lazy' ) ) : '';
+	if ( ! $preview ) {
+		$preview = '<img class="checklist-preview__img" src="' . esc_url( FVR_URI . '/assets/images/checklist-preview.jpg' ) . '" width="1100" height="1424" loading="lazy" decoding="async" alt="' . esc_attr__( 'Page 1 of the Seven Questions checklist: the title, a short introduction, and the first two questions with lined space for notes.', 'fvr' ) . '">';
+	}
 	?>
 	<section class="page-hero page-hero--split">
 		<div class="container split">
@@ -37,17 +42,20 @@ while ( have_posts() ) :
 	<section class="section section--tight">
 		<div class="container container--narrow">
 			<div class="panel">
-				<h2 class="h3"><?php echo esc_html( fvr_field( 'page_extra_title', 'What\'s inside' ) ); ?></h2>
-				<?php if ( $inside ) : ?>
-					<ul class="check-list">
-						<?php foreach ( $inside as $i ) : ?>
-							<li><?php echo fvr_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php echo esc_html( $i ); ?></span></li>
-						<?php endforeach; ?>
-					</ul>
-				<?php else : ?>
-					<p class="muted"><?php esc_html_e( 'A real preview of the checklist will appear here.', 'fvr' ); ?></p>
-					<?php fvr_pending( 'Add 3–6 real checklist items (page field "Extra section text") so the preview reflects the actual PDF.' ); ?>
-				<?php endif; ?>
+				<h2 class="h3"><?php echo esc_html( fvr_field( 'page_extra_title', 'The seven questions inside' ) ); ?></h2>
+				<div class="checklist-preview">
+					<figure class="checklist-preview__figure">
+						<?php echo $preview; // phpcs:ignore WordPress.Security.EscapeOutput -- built from escaped parts above. ?>
+						<figcaption><?php echo esc_html( fvr_field( 'page_preview_caption', '3 fillable pages · 7 questions · room for your own notes.' ) ); ?></figcaption>
+					</figure>
+					<?php if ( $inside ) : ?>
+						<ol class="checklist-preview__list">
+							<?php foreach ( $inside as $i ) : ?>
+								<li><?php echo esc_html( $i ); ?></li>
+							<?php endforeach; ?>
+						</ol>
+					<?php endif; ?>
+				</div>
 			</div>
 			<p class="fineprint"><?php esc_html_e( 'This checklist is educational and is not medical advice.', 'fvr' ); ?></p>
 		</div>

@@ -5,7 +5,7 @@
  * @package foundvital-reset
  */
 
-$good     = fvr_lines( fvr_field( 'fit_good', "You're already caring for your health and want structure and guidance.\nYou're comfortable working independently between scheduled check-ins.\nYou'd rather choose a few practical priorities than follow another complicated plan." ) );
+$good     = fvr_lines( fvr_field( 'fit_good', "You're in your 40s or beyond, including perimenopause or menopause, and want a plan that takes this stage of life into account.\nYou're already caring for your health and want structure and guidance.\nYou're comfortable working independently between scheduled check-ins.\nYou'd rather choose a few practical priorities than follow another complicated plan." ) );
 $not      = fvr_lines( fvr_field( 'fit_not', "A diagnostic, treatment, or medication-access service.\nA guarantee of rapid weight loss or any specific result.\nA replacement for care from your licensed healthcare provider." ) );
 $included = fvr_lines( fvr_field( 'fit_included', "Onboarding, goal-setting, and your three core commitments\nA one-hour 1:1 onboarding call with Tara\nFive 30-minute coaching check-ins with Tara\nThe FoundVital Blueprint, your personalized plan for the whole 12-week Reset, prepared by Tara\nProtein and meal-planning resources\nProgressive movement and strength training\nEducation on sleep, stress, recovery, and midlife health\nA FoundVital smart scale (body composition scale), mailed to you\nThe Welcome Kit and worksheets\nA full-term learning library and private member community" ) );
 $weekly   = (string) fvr_field( 'fit_weekly', '' );
@@ -54,7 +54,7 @@ $weekly   = (string) fvr_field( 'fit_weekly', '' );
 			fvr_pending( 'This section currently contains SAMPLE content (price, terms, check-ins, FAQ answers) for design review only. Replace it with approved content before launch. See Reset Settings > Launch readiness.' );
 		}
 		?>
-		<?php get_template_part( 'template-parts/pricing' ); ?>
+		<?php get_template_part( 'template-parts/pricing', null, array( 'fit_button' => true ) ); ?>
 
 		<div class="faq reveal" id="faq">
 			<h3 class="faq__title"><?php esc_html_e( 'Frequently asked questions', 'fvr' ); ?></h3>

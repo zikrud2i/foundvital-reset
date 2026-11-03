@@ -103,6 +103,39 @@
 		});
 	});
 
+	/* ---------- Checklist: sign up in the background and confirm on the same page ----------
+	   Keeps the visitor on /checklist/ so the Meta Pixel "Lead" fires only after Kit has accepted
+	   the sign-up. Without fetch (or on a network error) the form submits normally instead. */
+	var cform = doc.querySelector('form[data-form-type="checklist"]'), cdone = doc.getElementById('signup-success');
+	if (cform && cdone && window.fetch && window.FormData) {
+		cform.addEventListener('submit', function (e) {
+			if (e.defaultPrevented) { return; } /* client hints found a problem */
+			e.preventDefault();
+			var btn = cform.querySelector('button[type=submit]'), data = new FormData(cform);
+			data.append('fvr_ajax', '1');
+			btn.disabled = true;
+			/* getAttribute: the hidden field named "action" shadows form.action */
+			fetch(cform.getAttribute('action'), { method: 'POST', body: data, credentials: 'same-origin' })
+				.then(function (r) { return r.json(); })
+				.then(function (res) {
+					if (res && res.success) {
+						cform.hidden = true;
+						cdone.hidden = false;
+						cdone.focus();
+						track('checklist_signup_success');
+						if (typeof window.fbq === 'function') { window.fbq('track', 'Lead'); }
+						return;
+					}
+					btn.disabled = false;
+					var box = cform.querySelector('.alert--error');
+					if (!box) { box = doc.createElement('div'); box.className = 'alert alert--error'; box.setAttribute('role', 'alert'); cform.insertBefore(box, cform.firstChild); }
+					box.textContent = (res && res.data && res.data.message) || 'Something went wrong. Please try again.';
+					box.scrollIntoView({ block: 'center' });
+				})
+				.catch(function () { HTMLFormElement.prototype.submit.call(cform); });
+		});
+	}
+
 	/* ---------- Calendly inline embed (lazy) + verified booking event ---------- */
 	var cal = doc.querySelector('.calendly[data-calendly-url]');
 	function loadCalendly() {

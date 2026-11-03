@@ -12,6 +12,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 add_action( 'after_switch_theme', 'fvr_run_setup' );
 
+/** Pages added after launch: created once, the first time an admin loads wp-admin after a theme update. */
+add_action(
+	'admin_init',
+	static function () {
+		if ( (int) get_option( 'fvr_pages_rev' ) >= 1 || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		fvr_ensure_page( 'assessment', 'Your Reset Starting Point', 'page-templates/assessment.php' );
+		update_option( 'fvr_pages_rev', 1 );
+	}
+);
+
 add_action(
 	'admin_post_fvr_run_setup',
 	static function () {
@@ -84,6 +96,7 @@ function fvr_run_setup(): void {
 	fvr_ensure_page( 'thank-you/masterclass', 'You\'re Registered', $T . 'thank-you.php' );
 	fvr_ensure_page( 'thank-you/fit-call', 'Your Fit Conversation', $T . 'thank-you.php' );
 	fvr_ensure_page( 'thank-you/enrollment', 'Enrollment', $T . 'thank-you.php' );
+	fvr_ensure_page( 'assessment', 'Your Reset Starting Point', $T . 'assessment.php' );
 	fvr_ensure_page( 'clarity-coaching', 'FoundVital Clarity Coaching Session', $T . 'clarity-coaching.php', 'draft' );
 
 	$privacy = fvr_ensure_page( 'privacy-policy', 'Privacy Policy', '', 'draft', $legal );

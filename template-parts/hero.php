@@ -11,10 +11,10 @@ $photo  = fvr_founder_photo( 'fvr-portrait', array( 'class' => 'hero__img', 'loa
 <section class="hero" aria-labelledby="hero-title">
 	<div class="container hero__grid">
 		<div class="hero__copy">
-			<p class="eyebrow"><?php echo esc_html( fvr_field( 'hero_eyebrow', 'For women in perimenopause and menopause' ) ); ?></p>
+			<p class="eyebrow"><?php echo esc_html( fvr_field( 'hero_eyebrow', 'For women in midlife, perimenopause and menopause' ) ); ?></p>
 			<h1 id="hero-title"><?php echo fvr_hero_headline( (string) fvr_field( 'hero_headline', 'You\'re already putting effort into your health. Get a clearer way forward.' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped inside the helper. ?></h1>
-			<?php $sub_strong = (string) fvr_field( 'hero_sub_strong', 'Finish with steadier energy, a strength routine you actually follow, and your own before-and-after numbers.' ); ?>
-			<p class="lead"><?php echo esc_html( fvr_field( 'hero_sub', 'A 12-week coaching and education program, guided by a physician assistant with 16 years of clinical experience. You get a personalized success roadmap built around your body, your schedule and your goals, so the effort you\'re already making goes where it counts.' ) ); ?><?php if ( $sub_strong ) : ?> <strong><?php echo esc_html( $sub_strong ); ?></strong><?php endif; ?></p>
+			<?php $sub_strong = (string) fvr_field( 'hero_sub_strong', 'Over 12 weeks, you\'ll work with Tara to build practical nutrition and strength routines, track progress beyond the scale, and develop a plan you can carry forward.' ); ?>
+			<p class="lead"><?php echo esc_html( fvr_field( 'hero_sub', 'A 12-week coaching and education program with a special focus on perimenopause and menopause, guided by a physician assistant with 16 years of clinical experience. You get a personalized success roadmap built around your body, your schedule and your goals, so the effort you\'re already making goes where it counts.' ) ); ?><?php if ( $sub_strong ) : ?> <strong><?php echo esc_html( $sub_strong ); ?></strong><?php endif; ?></p>
 
 			<ul class="hero__points">
 				<?php foreach ( $points as $pt ) : ?>

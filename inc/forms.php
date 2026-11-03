@@ -37,7 +37,15 @@ function fvr_return_url(): string {
 	return home_url( '/' );
 }
 
+/** True when the form was sent in the background by main.js (expects JSON, not a redirect). */
+function fvr_is_ajax_submit(): bool {
+	return ! empty( $_POST['fvr_ajax'] ); // phpcs:ignore WordPress.Security.NonceVerification -- nonce is checked by the handler.
+}
+
 function fvr_redirect_error( string $code, string $anchor = 'signup' ): void {
+	if ( fvr_is_ajax_submit() ) {
+		wp_send_json_error( array( 'message' => fvr_error_message( $code ) ) );
+	}
 	wp_safe_redirect( add_query_arg( 'fvr_err', $code, fvr_return_url() ) . '#' . $anchor );
 	exit;
 }
@@ -63,6 +71,58 @@ function fvr_privacy_link(): string {
 	}
 	return '';
 }
+
+/** Local file behind the fixed PDF address: the PDF chosen in Reset Settings, else the copy bundled with the theme. */
+function fvr_checklist_pdf_file(): string {
+	$src = (string) fvr_opt( 'checklist_url' );
+	$id  = $src ? attachment_url_to_postid( $src ) : 0;
+	$file = $id ? (string) get_attached_file( $id ) : '';
+	if ( $file && is_readable( $file ) ) {
+		return $file;
+	}
+	$bundled = FVR_DIR . '/assets/downloads/seven-questions-checklist.pdf';
+	return is_readable( $bundled ) ? $bundled : '';
+}
+
+/** Fixed public address of the checklist PDF (used in Kit emails, so it must never change). '' when there is no PDF. */
+function fvr_checklist_pdf_url(): string {
+	return ( fvr_checklist_pdf_file() || fvr_opt( 'checklist_url' ) ) ? home_url( '/downloads/seven-questions-checklist.pdf' ) : '';
+}
+
+/**
+ * Serve /downloads/seven-questions-checklist.pdf (see fvr_checklist_pdf_file()) with a noindex
+ * header so it stays out of search results. Swapping the PDF never changes this address.
+ */
+add_action(
+	'init',
+	static function () {
+		$uri  = isset( $_SERVER['REQUEST_URI'] ) ? (string) wp_parse_url( esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ), PHP_URL_PATH ) : '';
+		$base = (string) wp_parse_url( home_url( '/' ), PHP_URL_PATH );
+		if ( trim( substr( $uri, strlen( $base ) - 1 ), '/' ) !== 'downloads/seven-questions-checklist.pdf' ) {
+			return;
+		}
+		$src  = (string) fvr_opt( 'checklist_url' );
+		$file = fvr_checklist_pdf_file();
+		if ( ! $file ) {
+			if ( $src ) {
+				header( 'X-Robots-Tag: noindex, nofollow' );
+				wp_redirect( $src, 302 ); // phpcs:ignore WordPress.Security.SafeRedirect -- admin-set file URL.
+				exit;
+			}
+			status_header( 404 );
+			nocache_headers();
+			exit;
+		}
+		header( 'Content-Type: application/pdf' );
+		header( 'Content-Disposition: inline; filename="seven-questions-checklist.pdf"' );
+		header( 'Content-Length: ' . filesize( $file ) );
+		header( 'X-Robots-Tag: noindex, nofollow' );
+		header( 'Cache-Control: public, max-age=3600' );
+		readfile( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		exit;
+	},
+	0
+);
 
 /** The 50 US states, for the "State of residence" field. */
 function fvr_us_states(): array {
@@ -148,6 +208,21 @@ function fvr_lead_form( string $type, string $button, string $consent = '' ): vo
 	<?php
 	fvr_signup_privacy_note();
 	echo '</form>';
+	if ( 'checklist' === $type ) {
+		fvr_checklist_success( true );
+	}
+}
+
+/** "Your checklist is on its way" message with the download button (in-page after sign-up, and on the thank-you page). */
+function fvr_checklist_success( bool $hidden = false ): void {
+	$pdf = fvr_checklist_pdf_url();
+	echo '<div class="form-success" id="signup-success" tabindex="-1"' . ( $hidden ? ' hidden' : '' ) . '>';
+	echo '<p class="form-success__title">' . esc_html__( 'Thank you! Your checklist is on its way to your inbox.', 'fvr' ) . '</p>';
+	if ( $pdf ) {
+		echo '<p>' . esc_html__( 'You can also download it now:', 'fvr' ) . '</p>';
+		fvr_btn( __( 'Download the Checklist (PDF)', 'fvr' ), $pdf, 'primary', 'checklist_download_click' );
+	}
+	echo '</div>';
 }
 
 add_action( 'admin_post_nopriv_fvr_subscribe', 'fvr_handle_subscribe' );
@@ -187,12 +262,15 @@ function fvr_handle_subscribe(): void {
 		$first,
 		(int) fvr_opt( 'kit_form_' . $type ),
 		array( (int) fvr_opt( 'kit_tag_' . $type ) ),
-		array( 'State' => $state )
+		array( 'state' => $state )
 	);
 	if ( is_wp_error( $result ) ) {
 		fvr_redirect_error( 'kit_unconfigured' === $result->get_error_code() ? 'config' : 'kit' );
 	}
 
+	if ( fvr_is_ajax_submit() ) {
+		wp_send_json_success();
+	}
 	fvr_set_success_cookie( $type );
 	wp_safe_redirect( fvr_thanks_url( $type ) );
 	exit;

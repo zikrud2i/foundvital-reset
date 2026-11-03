@@ -17,7 +17,7 @@ while ( have_posts() ) :
 			'label'  => 'Build Your Foundations',
 			'intro'  => 'A good next step is to start with simple, practical foundations: lifestyle, nutrition, and mindset basics you can build on.',
 			'points' => "Choose one or two simple starting priorities\nBuild everyday nutrition, sleep, and stress routines you can repeat\nLearn the \"why\" behind each habit so decisions feel clearer",
-			'ctas'   => array( array( 'Get the Free Checklist', 'checklist', 'primary', 'cta_checklist_result' ) ),
+			'ctas'   => array( array( 'Download the Free Checklist (PDF)', 'checklist-pdf', 'primary', 'checklist_download_click' ) ),
 			'soft'   => 'Prefer to talk it through? Book a fit conversation.',
 		),
 		'routine'     => array(
@@ -25,7 +25,7 @@ while ( have_posts() ) :
 			'label'  => 'Create a Workable Routine',
 			'intro'  => 'You already know a lot. A good next step is connecting what you know with routines that hold up in a busy week.',
 			'points' => "Turn what you already know into a short list of repeatable habits\nMatch your routine to your real schedule, not an ideal one\nSee how Reset's structure can help the habits stick",
-			'ctas'   => array( array( 'Get the Free Checklist', 'checklist', 'primary', 'cta_checklist_result' ) ),
+			'ctas'   => array( array( 'Download the Free Checklist (PDF)', 'checklist-pdf', 'primary', 'checklist_download_click' ) ),
 			'soft'   => 'Curious about structured support? Book a fit conversation.',
 		),
 		'coaching'    => array(
@@ -34,7 +34,7 @@ while ( have_posts() ) :
 			'intro'  => 'You may be ready for more structure and accountability. A fit conversation is a good way to see whether Reset matches what you\'re looking for.',
 			'points' => "Scheduled, personalized coaching check-ins\nA 12-week path through nutrition, strength, recovery, and habits\nTime to ask questions and decide on your own timeline",
 			'ctas'   => array( array( 'Book a Reset Fit Conversation', 'fit-call', 'primary', 'cta_fit_call_result' ), array( 'See How Reset Works', '', 'secondary', 'cta_how_it_works' ) ),
-			'soft'   => 'Want to learn more first? Get the free checklist.',
+			'soft'   => 'Want to learn more first? Download the free checklist.',
 		),
 	);
 	$d      = $defaults[ $slug ] ?? $defaults['foundations'];
@@ -70,12 +70,16 @@ while ( have_posts() ) :
 				<div class="btn-row">
 					<?php
 					foreach ( $d['ctas'] as $c ) {
-						$url = $c[1] ? fvr_page_url( $c[1] ) : home_url( '/#how-reset-works' );
+						if ( 'checklist-pdf' === $c[1] ) {
+							$url = fvr_checklist_pdf_url() ? fvr_checklist_pdf_url() : fvr_page_url( 'checklist' );
+						} else {
+							$url = $c[1] ? fvr_page_url( $c[1] ) : home_url( '/#how-reset-works' );
+						}
 						fvr_btn( $c[0], $url, $c[2], $c[3] );
 					}
 					?>
 				</div>
-				<p class="muted mt"><?php echo esc_html( $d['soft'] ); ?> <a href="<?php echo esc_url( 'coaching' === $slug ? fvr_page_url( 'checklist' ) : fvr_page_url( 'fit-call' ) ); ?>"><?php esc_html_e( 'Learn more', 'fvr' ); ?></a></p>
+				<p class="muted mt"><?php echo esc_html( $d['soft'] ); ?> <a href="<?php echo esc_url( 'coaching' === $slug ? ( fvr_checklist_pdf_url() ? fvr_checklist_pdf_url() : fvr_page_url( 'checklist' ) ) : fvr_page_url( 'fit-call' ) ); ?>"<?php echo 'coaching' === $slug ? ' data-track="checklist_download_click"' : ''; ?>><?php echo esc_html( 'coaching' === $slug ? __( 'Download (PDF)', 'fvr' ) : __( 'Learn more', 'fvr' ) ); ?></a></p>
 			</div>
 
 			<p class="fineprint"><?php esc_html_e( 'This quiz is educational and not a diagnosis or medical advice. Results simply suggest a helpful next step.', 'fvr' ); ?></p>

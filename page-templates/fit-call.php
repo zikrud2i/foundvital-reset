@@ -38,7 +38,7 @@ while ( have_posts() ) :
 							<li><?php echo fvr_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php echo esc_html( $l ); ?></span></li>
 						<?php endforeach; ?>
 					</ul>
-					<p class="callout"><?php esc_html_e( 'A fit conversation is a coaching and program-fit conversation. It is not a medical appointment, and no diagnosis or treatment advice is given.', 'fvr' ); ?></p>
+					<p class="callout"><?php esc_html_e( 'This call is about your goals and whether Reset is a good fit. It\'s not a medical appointment, so no diagnosis or treatment advice is given.', 'fvr' ); ?></p>
 				</div>
 
 				<ol class="how-steps">

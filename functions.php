@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'FVR_VERSION', '1.0.0' );
+define( 'FVR_VERSION', '1.1.1' );
 define( 'FVR_DIR', get_template_directory() );
 define( 'FVR_URI', get_template_directory_uri() );
 

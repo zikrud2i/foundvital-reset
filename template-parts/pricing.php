@@ -1,15 +1,18 @@
 <?php
 /**
  * Pricing block. Visible only when "Show pricing block" is on AND an approved price is entered.
- * Pass array( 'heading_level' => 2 ) when the block sits directly under the page's h1.
+ * Pass array( 'heading_level' => 2 ) when the block sits directly under the page's h1,
+ * and array( 'fit_button' => true ) to put the Fit Conversation button under the Completion Bonus.
  *
  * @package foundvital-reset
  */
 
 $show      = (bool) fvr_opt( 'price_show' ) && fvr_opt( 'price_text' );
 $terms     = fvr_lines( fvr_opt( 'price_terms' ) );
-$optimize  = fvr_lines( fvr_opt( 'optimize_terms' ) );
-$guarantee = (string) fvr_opt( 'guarantee_text' );
+$optimize  = fvr_lines( fvr_opt( 'sustain_points' ) );
+$guarantee = (string) fvr_opt( 'bonus_text' );
+$sustain   = array_filter( array( (string) fvr_opt( 'sustain_desc' ), (string) fvr_opt( 'sustain_price' ) ) );
+$fit_btn   = ! empty( $args['fit_button'] );
 $hn        = 'h' . ( isset( $args['heading_level'] ) && 2 === (int) $args['heading_level'] ? 2 : 3 );
 ?>
 <div class="pricing reveal" id="investment">
@@ -33,19 +36,28 @@ $hn        = 'h' . ( isset( $args['heading_level'] ) && 2 === (int) $args['headi
 
 	<?php if ( $guarantee ) : ?>
 		<div class="callout">
-			<<?php echo esc_attr( $hn ); ?> class="callout__title"><?php esc_html_e( 'Completion Guarantee', 'fvr' ); ?></<?php echo esc_attr( $hn ); ?>>
+			<<?php echo esc_attr( $hn ); ?> class="callout__title"><?php esc_html_e( 'Completion Bonus', 'fvr' ); ?></<?php echo esc_attr( $hn ); ?>>
 			<p><?php echo esc_html( $guarantee ); ?></p>
 		</div>
 	<?php endif; ?>
 
-	<?php if ( $optimize ) : ?>
+	<?php if ( $fit_btn ) : ?>
+		<div class="btn-row"><?php fvr_fit_btn( 'primary', '', 'cta_fit_call_pricing' ); ?></div>
+	<?php endif; ?>
+
+	<?php if ( $optimize || $sustain ) : ?>
 		<div class="callout">
 			<<?php echo esc_attr( $hn ); ?> class="callout__title"><?php esc_html_e( 'FoundVital Sustain™', 'fvr' ); ?></<?php echo esc_attr( $hn ); ?>>
-			<ul class="check-list check-list--small">
-				<?php foreach ( $optimize as $t ) : ?>
-					<li><?php echo fvr_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php echo esc_html( $t ); ?></span></li>
-				<?php endforeach; ?>
-			</ul>
+			<?php if ( $optimize ) : ?>
+				<ul class="check-list check-list--small">
+					<?php foreach ( $optimize as $t ) : ?>
+						<li><?php echo fvr_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php echo esc_html( $t ); ?></span></li>
+					<?php endforeach; ?>
+				</ul>
+			<?php endif; ?>
+			<?php foreach ( $sustain as $para ) : ?>
+				<p><?php echo esc_html( $para ); ?></p>
+			<?php endforeach; ?>
 		</div>
 	<?php endif; ?>
 </div>

@@ -12,7 +12,7 @@ $phases = apply_filters(
 		array( 'Regulate', 'Weeks 1–3', 'Everyday nutrition, sleep, stress, and recovery routines.', 1, 3 ),
 		array( 'Restore', 'Weeks 4–6', 'Midlife health education, hormone-related topics, and recovery.', 4, 6 ),
 		array( 'Rebuild', 'Weeks 7–9', 'Strength, muscle health, protein, and progressive movement.', 7, 9 ),
-		array( 'Optimize', 'Weeks 10–12', 'Review progress, strengthen sustainable habits, and create a forward plan.', 10, 12 ),
+		array( 'Optimize', 'Weeks 10–12', 'Healthy aging, lifelong strength, and a forward plan you can keep.', 10, 12 ),
 	)
 );
 

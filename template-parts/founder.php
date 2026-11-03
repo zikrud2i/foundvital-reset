@@ -11,7 +11,7 @@ $exp   = (string) fvr_opt( 'founder_experience' );
 $video = (string) fvr_opt( 'founder_video_url' );
 $name  = (string) fvr_opt( 'founder_name' );
 
-$p1 = fvr_field( 'meet_p1', 'I\'ve spent 16 years working as a physician assistant, and my background in clinical care and lifestyle medicine has shaped how I think about health. I use that foundation to teach in plain language, not to hand you a résumé or a rulebook.' );
+$p1 = fvr_field( 'meet_p1', 'I\'ve spent 16 years working as a physician assistant, and my background in clinical care and lifestyle medicine has shaped how I think about health. I use that foundation to teach in plain language, not to hand you a résumé or a rulebook. I\'m a Diplomate of the American College of Lifestyle Medicine (DipACLM) and a member of the American Academy of Physician Associates (AAPA).' );
 $p2 = fvr_field( 'meet_p2', 'I created Reset to bring nutrition, strength, recovery, and everyday habits together in a more structured, practical way, built on informed decisions, sustainable habits, personalization, transparency, and long-term health.' );
 $p3 = fvr_field( 'meet_p3', 'Knowing the information isn\'t always enough, so my experience shapes how Reset teaches and coaches: turning what matters into steps you can actually follow.' );
 $p4 = fvr_field( 'meet_boundary', 'Reset is coaching and education. Separate licensed providers handle medical evaluation, prescribing, and clinical lab interpretation.' );
@@ -60,7 +60,8 @@ if ( $video ) {
 
 		<div class="founder__copy reveal">
 			<p class="eyebrow"><?php echo esc_html( 'Meet ' . $name ); ?></p>
-			<h2 id="meet-title"><?php echo esc_html( fvr_field( 'meet_heading', 'Clinically informed. Grounded in real life.' ) ); ?></h2>
+			<h2 id="meet-title"><?php echo esc_html( fvr_field( 'meet_heading', 'Clinically informed. Menopause focused. Grounded in real life.' ) ); ?></h2>
+			<p class="founder__sub"><?php echo esc_html( fvr_field( 'meet_subheading', 'Not a general coach. Specializing in perimenopause and menopause.' ) ); ?></p>
 
 			<ul class="chip-list" aria-label="<?php esc_attr_e( 'Credentials', 'fvr' ); ?>">
 				<?php foreach ( $creds as $c ) : ?>
