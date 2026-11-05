@@ -1,4 +1,6 @@
-/* FoundVital Reset – stepped quiz. Without JS every question is shown on one page and the form still submits. */
+/* FoundVital Reset – stepped quiz. Step 0 is the required email subscription ("Start My Free Reset Quiz"),
+   then one step per question. Without JS every step is shown on one page and the form still submits;
+   the server validates everything again. */
 (function () {
 	'use strict';
 	var form = document.querySelector('form.quiz');
@@ -13,12 +15,15 @@
 	var fill = bar.querySelector('span');
 	var count = form.querySelector('.quiz__count');
 	var questions = parseInt(form.getAttribute('data-questions'), 10) || steps.length;
+	var hasIntro = form.getAttribute('data-intro') === '1';
+	var offset = hasIntro ? 1 : 0; /* index of the first question step */
 	var total = steps.length;
+	var nextLabel = nNext.querySelector('span');
+	var capErr = form.querySelector('#quiz-caperr');
 	var i = 0;
 	var started = false;
 
 	form.classList.add('is-stepped');
-	progress.hidden = false;
 	nNext.hidden = false;
 
 	function answered(step) { return !!step.querySelector('input[type=radio]:checked'); }
@@ -26,21 +31,40 @@
 	function show(idx, focus) {
 		i = idx;
 		steps.forEach(function (s, k) { s.hidden = k !== i; s.classList.toggle('is-current', k === i); });
+		var isIntro = hasIntro && i === 0;
 		var isLast = i === total - 1;
 		nBack.hidden = i === 0;
 		nNext.hidden = isLast;
 		nSubmit.hidden = !isLast;
-		var done = Math.min(i, questions);
+		if (nextLabel) { nextLabel.textContent = nNext.getAttribute(isIntro ? 'data-label-start' : 'data-label-next') || nextLabel.textContent; }
+		progress.hidden = isIntro;
+		var done = Math.max(0, i - offset); /* questions already answered */
 		bar.setAttribute('aria-valuenow', String(done));
-		fill.style.width = Math.round((done / total) * 100) + '%';
-		count.textContent = (i + 1 <= questions ? 'Question ' + (i + 1) + ' of ' + questions : 'Last step') ;
+		fill.style.width = Math.round((done / questions) * 100) + '%';
+		count.textContent = isIntro ? '' : 'Question ' + (i - offset + 1) + ' of ' + questions;
 		if (focus) {
-			var first = steps[i].querySelector('input:checked, input, legend');
+			var first = steps[i].querySelector('input:checked, input, select, legend');
 			if (first) { first.focus({ preventScroll: false }); }
 		}
 	}
 
+	/* The email step: first name, email, state and consent are all required before the quiz starts. */
+	function validateIntro() {
+		var fn = form.querySelector('#quiz-fn'), em = form.querySelector('#quiz-em'), st = form.querySelector('#fvr-st-quiz'), co = form.querySelector('#quiz-co');
+		if (!fn || !em || !st || !co) { return true; }
+		var gap = null, msg = '';
+		if (!fn.value.trim()) { gap = fn; msg = 'Please enter your first name.'; }
+		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value)) { gap = em; msg = 'Please enter a valid email address.'; }
+		else if (!st.value) { gap = st; msg = 'Please choose your state of residence.'; }
+		else if (!co.checked) { gap = co; msg = 'Please tick the consent box to subscribe. A FoundVital email subscription is required to take the quiz.'; }
+		[fn, em, st].forEach(function (f) { if (f === gap) { f.setAttribute('aria-invalid', 'true'); } else { f.removeAttribute('aria-invalid'); } });
+		if (capErr) { capErr.textContent = msg; capErr.hidden = !msg; }
+		if (gap) { gap.focus(); return false; }
+		return true;
+	}
+
 	function validate() {
+		if (hasIntro && i === 0) { return validateIntro(); }
 		var step = steps[i];
 		if (step.querySelector('input[type=radio]') && !answered(step)) {
 			var err = step.querySelector('.field__error');
@@ -61,23 +85,24 @@
 		}
 	});
 
-	form.addEventListener('submit', function (e) {
-		/* Make sure every question was answered; jump back to the first gap otherwise. */
-		for (var k = 0; k < questions; k++) {
-			if (!answered(steps[k])) { e.preventDefault(); show(k, true); var err = steps[k].querySelector('.field__error'); if (err) { err.hidden = false; } return; }
+	/* Pressing Enter in the email step should start the quiz, not submit a half-finished form. */
+	form.addEventListener('keydown', function (e) {
+		if (e.key === 'Enter' && hasIntro && i === 0 && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'TEXTAREA') {
+			e.preventDefault();
+			if (validate()) { show(1, true); }
 		}
-		/* The email step is required: first name, email, state and consent before the result is shown. */
-		var fn = form.querySelector('#quiz-fn'), em = form.querySelector('#quiz-em'), st = form.querySelector('#fvr-st-quiz'), co = form.querySelector('#quiz-co');
-		var capErr = form.querySelector('#quiz-caperr');
-		if (!em || !fn || !st || !co) { return; }
-		var gap = null, msg = '';
-		if (!fn.value.trim()) { gap = fn; msg = 'Please enter your first name.'; }
-		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value)) { gap = em; msg = 'Please enter a valid email address.'; }
-		else if (!st.value) { gap = st; msg = 'Please choose your state of residence.'; }
-		else if (!co.checked) { gap = co; msg = 'Please tick the consent box so we can email you your result.'; }
-		[fn, em, st].forEach(function (f) { if (f === gap) { f.setAttribute('aria-invalid', 'true'); } else { f.removeAttribute('aria-invalid'); } });
-		if (capErr) { capErr.textContent = msg; capErr.hidden = !msg; }
-		if (gap) { e.preventDefault(); show(total - 1, false); gap.focus(); }
+	});
+
+	form.addEventListener('submit', function (e) {
+		/* Email step first, then every question; jump back to the first gap otherwise. */
+		if (hasIntro && !validateIntro()) { e.preventDefault(); show(0, false); return; }
+		for (var k = offset; k < total; k++) {
+			if (!answered(steps[k])) {
+				e.preventDefault(); show(k, true);
+				var err = steps[k].querySelector('.field__error'); if (err) { err.hidden = false; }
+				return;
+			}
+		}
 	});
 
 	show(0, false);

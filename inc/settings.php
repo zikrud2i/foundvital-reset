@@ -24,7 +24,7 @@ function fvr_settings_schema(): array {
 				array( 'key' => 'stripe_clarity_url', 'label' => 'Stripe Payment Link – Clarity Coaching ($100)', 'type' => 'url', 'desc' => 'FoundVital collects ONLY the coaching payment here.' ),
 				array( 'key' => 'outfitmd_url', 'label' => 'OutfitMD affiliate shop URL ($99 testing)', 'type' => 'url', 'desc' => 'External purchase. FoundVital does not collect this payment.' ),
 				array( 'key' => 'lab_page_url', 'label' => 'Clarity Coaching page URL (if hosted on foundvital.com)', 'type' => 'url', 'desc' => 'Architecture decision pending. Leave as the proposed foundvital.com URL, or point to this site\'s /clarity-coaching page.' ),
-				array( 'key' => 'meta_pixel_id', 'label' => 'Meta Pixel ID', 'type' => 'id', 'desc' => 'Loads ONLY on the home page and /checklist/ (PageView, plus one Lead after a checklist sign-up). Blank = off.' ),
+				array( 'key' => 'meta_pixel_id', 'label' => 'Meta Pixel ID', 'type' => 'id', 'desc' => 'Loads ONLY on the home page, /checklist/, /quiz/ and /fit-call/ (PageView only, plus one Lead after a checklist sign-up). Blank = off.' ),
 				array( 'key' => 'support_email', 'label' => 'Support / contact email', 'type' => 'email', 'desc' => 'Optional. Shown on confirmation pages when set.' ),
 			),
 		),

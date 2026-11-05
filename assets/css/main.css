@@ -500,3 +500,30 @@ main:focus { outline: none; }
 .site-footer__disclaimer { margin-inline: auto; max-width: 104ch; }
 .social-list, .footer-nav .footer-list, .legal-list { justify-content: center; }
 .site-footer__legal { flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+
+/* ---------- Quiz & checklist landing pages, result pages (Tara review copy) ---------- */
+.form-card__intro { font-size: 0.95rem; color: var(--muted); margin-bottom: 1.2rem; }
+.quiz__step--intro { margin-bottom: 8px; }
+.form-card .quiz__step legend { font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem); }
+.exercise { margin: 1.6rem 0; padding: 22px 24px; background: var(--ice); border-left: 4px solid var(--teal); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+.exercise h3 { margin-bottom: 0.6em; color: var(--teal-deep); }
+.exercise ol { margin: 0 0 1rem 1.2em; display: grid; gap: 6px; }
+.exercise__fill { margin: 0; padding-top: 14px; border-top: 1px dashed #9fc3d3; font-weight: 500; color: var(--navy); overflow-wrap: anywhere; }
+.result-tara, .tara-note { display: flex; gap: 24px; align-items: flex-start; }
+.result-tara__img, .tara-note__img { width: 96px; height: 96px; flex: none; border-radius: 50%; object-fit: cover; background: #fff; border: 3px solid rgb(4 92 119 / 28%); box-shadow: 0 0 0 6px rgb(4 92 119 / 7%); }
+.tara-note { margin-top: 28px; padding: 28px; background: var(--sand); border: 1px solid #eadfcf; border-radius: var(--r); }
+.tara-note blockquote { margin: 0 0 1rem; padding-left: 16px; border-left: 3px solid var(--gold); font-style: italic; color: var(--navy); }
+.tara-note blockquote p { margin: 0; }
+.cta-band__note a { color: #fff; }
+@media (max-width: 600px) { .result-tara, .tara-note { flex-direction: column; } }
+.quiz .fineprint, .quiz .form__privacy { text-align: left; }
+
+.split__disclaimer { text-align: left; margin: var(--space-3, 1rem) 0 0; }
+/* Quiz: keep the disclaimer under the card by sticking the whole column, not just the card. */
+.split__form:has(.split__disclaimer) { position: sticky; top: 104px; align-self: start; }
+.split__form:has(.split__disclaimer) .form-card { position: static; }
+@media (max-width: 900px) { .split__form:has(.split__disclaimer) { position: static; } }
+.checklist-preview__text { margin: 0; font-size: 1.05rem; color: var(--navy); align-self: center; }
+/* Legal pages (privacy policy, enrollment terms): numbered section headings are 20px desktop / 18px mobile. */
+.prose h2 { font-size: 1.25rem; font-weight: 600; line-height: 1.35; margin: 32px 0 8px; }
+@media (max-width: 600px) { .prose h2 { font-size: 1.125rem; } }

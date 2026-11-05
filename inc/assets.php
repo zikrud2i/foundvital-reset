@@ -72,12 +72,13 @@ add_action(
 );
 
 /**
- * Meta Pixel: home page and /checklist/ ONLY (never quiz, results, booking, legal, client or payment pages).
+ * Meta Pixel (PageView only): home page, /checklist/, the /quiz/ start page and /fit-call/. Never the quiz results, legal,
+ * assessment, client, checkout or thank-you pages.
  * PageView here; the single "Lead" (no parameters) fires in main.js after a confirmed checklist sign-up.
  * autoConfig is off so Meta never reads buttons or form fields on its own.
  */
 function fvr_pixel_page(): bool {
-	return is_front_page() || ( is_page() && 'checklist' === get_page_uri( get_queried_object_id() ) );
+	return is_front_page() || ( is_page() && in_array( get_page_uri( get_queried_object_id() ), array( 'checklist', 'quiz', 'fit-call' ), true ) );
 }
 
 add_action(
@@ -90,6 +91,7 @@ add_action(
 		?>
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq.disablePushState=true;
 fbq('set','autoConfig',false,'<?php echo esc_js( $id ); ?>');
 fbq('init','<?php echo esc_js( $id ); ?>');
 fbq('track','PageView');

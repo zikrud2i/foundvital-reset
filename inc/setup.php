@@ -159,19 +159,51 @@ function fvr_seed_faqs(): void {
 	}
 }
 
-/** Sample quiz questions – clearly sample content pending client approval. */
+/**
+ * The seven quiz questions from Tara's reviewed copy (October 2026). Each answer ends in "| A", "| B" or "| C":
+ * A = Build Your Foundations, B = Create a Workable Routine, C = Explore Structured Coaching.
+ *
+ * @return array<int, array{0:string,1:string}>
+ */
+function fvr_quiz_default_questions(): array {
+	return array(
+		array(
+			'When you think about your health routines, what feels least clear?',
+			"Which of the many things I've read deserve attention first. | A\nHow to make the habits I value fit into a normal week. | B\nI've made an effort, but would value thoughtful guidance in reviewing whether my approach still fits my goals. | C",
+		),
+		array(
+			'Think of a health tip you\'ve saved or read recently. What usually happens next?',
+			"I'm not sure whether it should be a priority, so it sits in my saved posts. | A\nI understand the idea, but my schedule gets in the way of doing it. | B\nI try ideas, but would appreciate someone to help me look at what feels useful and what needs adjusting. | C",
+		),
+		array(
+			'When your schedule gets unexpectedly busy, which challenge is most familiar?',
+			"I can't tell which habits matter enough to protect. | A\nMy routines become hard to repeat because I haven't planned a flexible option. | B\nI keep doing what I can, but a scheduled check-in would help me reflect and choose the next step. | C",
+		),
+		array(
+			'When you think about nutrition, strength, sleep, and recovery together, which sounds most like you?',
+			"There are a lot of recommendations and I'm unsure where to start. | A\nI have priorities, but they compete for the same time and attention. | B\nI have some consistent practices and would value knowledgeable support in thinking about how they fit together. | C",
+		),
+		array(
+			'If you had 15 minutes to make next week feel more manageable, what would you do?',
+			"Choose one useful focus instead of adding several new goals. | A\nPut one existing habit on the calendar and plan a backup for a busy day. | B\nTalk through what has been working with someone who can help me set realistic goals and review them. | C",
+		),
+		array(
+			'Which description best matches where you are now?',
+			"I've collected a lot of ideas and want to simplify before doing more. | A\nI know some habits I want, but staying consistent is difficult. | B\nI've established some routines and think structured accountability and scheduled guidance would help. | C",
+		),
+		array(
+			'When you think about taking a next step, what type of information or guidance would feel most useful?',
+			"A clear, practical introduction to foundations and which topic to focus on first. | A\nA clear explanation of how to put habits together using a structured, four-phase approach. | B\nA chance to understand what coaching with an experienced professional involves before deciding whether it's right for me. | C",
+		),
+	);
+}
+
+/** Seed the quiz questions on a fresh install (never touches existing questions). */
 function fvr_seed_quiz(): void {
 	if ( get_posts( array( 'post_type' => 'fvr_quiz_q', 'post_status' => 'any', 'posts_per_page' => 1, 'fields' => 'ids' ) ) ) {
 		return;
 	}
-	$qs = array(
-		array( 'Which sounds most like where you are right now?', "I'm still getting the basics in place | A\nI know what to do, but keeping it consistent is the hard part | B\nI've been doing a lot and want more structured guidance | C" ),
-		array( 'How would you describe your current routine?', "It changes from week to week and doesn't have much structure | A\nSome habits stick, others come and go | B\nMy routine is solid, but I'm not sure I'm prioritizing the right things | C" ),
-		array( 'What kind of support sounds most helpful?', "Simple starting points I can use on my own | A\nPractical tools that turn what I know into repeatable habits | B\nScheduled coaching check-ins and accountability | C" ),
-		array( 'How do you feel about working independently between check-ins?', "I'd like to begin with simple resources first | A\nComfortable, as long as I have practical tools | B\nComfortable, and I'd like guidance to adjust along the way | C" ),
-		array( 'What would make the next 12 weeks feel worthwhile?', "Clarity on where to begin | A\nA routine that fits my real week | B\nA structured plan with someone to review it with | C" ),
-	);
-	foreach ( $qs as $i => $q ) {
+	foreach ( fvr_quiz_default_questions() as $i => $q ) {
 		$id = wp_insert_post( array( 'post_type' => 'fvr_quiz_q', 'post_status' => 'publish', 'post_title' => $q[0], 'menu_order' => $i + 1 ) );
 		if ( $id && ! is_wp_error( $id ) ) {
 			update_post_meta( $id, '_fvr_answers', $q[1] );

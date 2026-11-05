@@ -157,13 +157,16 @@ function fvr_required_note(): void {
 }
 
 /** Line shown under every sign-up form. Links to the policy once it is published. */
-function fvr_signup_privacy_note(): void {
+function fvr_signup_privacy_note( string $prefix = '' ): void {
 	$p     = get_page_by_path( 'privacy-policy' );
 	$label = esc_html__( 'Privacy Policy', 'fvr' );
 	if ( $p && 'publish' === $p->post_status ) {
 		$label = '<a href="' . esc_url( get_permalink( $p ) ) . '">' . $label . '</a>';
 	}
-	echo '<p class="fineprint form__privacy">' . esc_html__( 'By signing up you agree to our', 'fvr' ) . ' ' . $label . '.</p>'; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped above.
+	if ( '' === $prefix ) {
+		$prefix = __( 'By signing up you agree to our', 'fvr' );
+	}
+	echo '<p class="fineprint form__privacy">' . esc_html( $prefix ) . ' ' . $label . '.</p>'; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped above.
 }
 
 /**
@@ -172,11 +175,11 @@ function fvr_signup_privacy_note(): void {
  * @param string $type   checklist|masterclass.
  * @param string $button Button label.
  */
-function fvr_lead_form( string $type, string $button, string $consent = '' ): void {
+function fvr_lead_form( string $type, string $button, string $consent = '', string $note_prefix = '' ): void {
 	$forminator_id = (int) fvr_opt( 'forminator_' . $type . '_id' );
 	if ( $forminator_id && shortcode_exists( 'forminator_form' ) ) {
 		echo do_shortcode( '[forminator_form id="' . $forminator_id . '"]' );
-		fvr_signup_privacy_note();
+		fvr_signup_privacy_note( $note_prefix );
 		return;
 	}
 	if ( '' === $consent ) {
@@ -206,7 +209,7 @@ function fvr_lead_form( string $type, string $button, string $consent = '' ): vo
 	</div>
 	<button class="btn btn--primary btn--block" type="submit"><span><?php echo esc_html( $button ); ?></span><?php echo fvr_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
 	<?php
-	fvr_signup_privacy_note();
+	fvr_signup_privacy_note( $note_prefix );
 	echo '</form>';
 	if ( 'checklist' === $type ) {
 		fvr_checklist_success( true );
@@ -217,10 +220,12 @@ function fvr_lead_form( string $type, string $button, string $consent = '' ): vo
 function fvr_checklist_success( bool $hidden = false ): void {
 	$pdf = fvr_checklist_pdf_url();
 	echo '<div class="form-success" id="signup-success" tabindex="-1"' . ( $hidden ? ' hidden' : '' ) . '>';
-	echo '<p class="form-success__title">' . esc_html__( 'Thank you! Your checklist is on its way to your inbox.', 'fvr' ) . '</p>';
 	if ( $pdf ) {
-		echo '<p>' . esc_html__( 'You can also download it now:', 'fvr' ) . '</p>';
-		fvr_btn( __( 'Download the Checklist (PDF)', 'fvr' ), $pdf, 'primary', 'checklist_download_click' );
+		echo '<p class="form-success__title">' . esc_html__( 'Thank you! Your checklist is ready to open or download now.', 'fvr' ) . '</p>';
+		echo '<p>' . esc_html__( 'A copy is also on its way to your inbox, so you can come back to it later.', 'fvr' ) . '</p>';
+		fvr_btn( __( 'Open or Download the Checklist (PDF)', 'fvr' ), $pdf, 'primary', 'checklist_download_click' );
+	} else {
+		echo '<p class="form-success__title">' . esc_html__( 'Thank you! Your checklist is on its way to your inbox.', 'fvr' ) . '</p>';
 	}
 	echo '</div>';
 }
