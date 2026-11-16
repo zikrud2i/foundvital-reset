@@ -81,6 +81,15 @@ function fvr_settings_schema(): array {
 				array( 'key' => 'turnstile_secret', 'label' => 'Cloudflare Turnstile secret key', 'type' => 'secret' ),
 			),
 		),
+		'stripe'    => array(
+			'label'  => __( 'Stripe 3-payment plan', 'fvr' ),
+			'fields' => array(
+				array( 'key' => 'stripe_webhook_url', 'label' => 'Webhook endpoint URL', 'type' => 'readonly', 'desc' => 'Add this in Stripe (Developers > Webhooks) and select the event customer.subscription.created. The webhook then ends the 3-payment plan after exactly 3 payments.' ),
+				array( 'key' => 'stripe_plan_price', 'label' => 'Price ID of the $699 monthly plan', 'type' => 'text', 'desc' => 'Default: price_1UWEcjKhOmg4nXw90Fjg8XVD. Only subscriptions on this price are converted.' ),
+				array( 'key' => 'stripe_webhook_secret', 'label' => 'Webhook signing secret (whsec_...)', 'type' => 'secret', 'desc' => 'Better: define FVR_STRIPE_WEBHOOK_SECRET in wp-config.php. Stored server-side only. Type CLEAR to remove.' ),
+				array( 'key' => 'stripe_api_key', 'label' => 'Restricted API key (Subscriptions: Write)', 'type' => 'secret', 'desc' => 'Better: define FVR_STRIPE_API_KEY in wp-config.php. Use the test-mode key first. Never a full secret key. Type CLEAR to remove.' ),
+			),
+		),
 		'checklist' => array(
 			'label'  => __( 'Checklist & masterclass', 'fvr' ),
 			'fields' => array(
@@ -226,8 +235,11 @@ function fvr_render_field( array $f, array $vals ): void {
 			printf( '<input type="hidden" name="%s" value="%d">', esc_attr( $name ), (int) $val );
 			echo '<button type="button" class="button fvr-media__pick">' . esc_html__( 'Choose image', 'fvr' ) . '</button> <button type="button" class="button-link fvr-media__clear">' . esc_html__( 'Remove', 'fvr' ) . '</button></div>';
 			break;
+		case 'readonly':
+			printf( '<input type="text" class="large-text code" readonly onclick="this.select()" value="%s">', esc_attr( fvr_stripe_webhook_url() ) );
+			break;
 		case 'secret':
-			$set = ( 'kit_api_key' === $k && defined( 'FVR_KIT_API_KEY' ) ) ? __( 'Set in wp-config.php', 'fvr' ) : ( $val ? __( 'Saved – enter a new value to replace', 'fvr' ) : '' );
+			$set = ( ( 'kit_api_key' === $k && defined( 'FVR_KIT_API_KEY' ) ) || ( 'stripe_api_key' === $k && defined( 'FVR_STRIPE_API_KEY' ) ) || ( 'stripe_webhook_secret' === $k && defined( 'FVR_STRIPE_WEBHOOK_SECRET' ) ) ) ? __( 'Set in wp-config.php', 'fvr' ) : ( $val ? __( 'Saved – enter a new value to replace', 'fvr' ) : '' );
 			printf( '<input type="password" class="regular-text" autocomplete="new-password" name="%s" value="" placeholder="%s">', esc_attr( $name ), esc_attr( $set ) );
 			break;
 		default:

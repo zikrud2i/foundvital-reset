@@ -142,7 +142,7 @@ function fvr_handle_quiz(): void {
 			$first,
 			(int) fvr_opt( 'kit_form_quiz' ),
 			array( (int) fvr_opt( 'kit_tag_quiz_any' ), (int) fvr_opt( $result['tag'] ) ),
-			array( 'state' => $state )
+			array_merge( array( 'state' => $state ), fvr_posted_utm() )
 		);
 		$sub_flag = is_wp_error( $r ) ? 'failed' : 'ok';
 	}

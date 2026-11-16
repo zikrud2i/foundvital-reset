@@ -129,6 +129,31 @@ function fvr_us_states(): array {
 	return array( 'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming' );
 }
 
+/** Campaign tags that Kit stores as custom fields (keys match the fields created in Kit). */
+function fvr_utm_keys(): array {
+	return array( 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content' );
+}
+
+/** Hidden inputs that main.js fills with the visit's UTM values. Empty when the visitor has no UTM tags. */
+function fvr_utm_fields(): void {
+	foreach ( fvr_utm_keys() as $k ) {
+		echo '<input type="hidden" name="' . esc_attr( $k ) . '" value="" data-utm="' . esc_attr( $k ) . '">';
+	}
+}
+
+/** Posted UTM values for Kit: plain text, 100 characters at most. Blank ones are left out so an earlier tag is never wiped. */
+function fvr_posted_utm(): array {
+	$out = array();
+	foreach ( fvr_utm_keys() as $k ) {
+		$v = isset( $_POST[ $k ] ) ? sanitize_text_field( wp_unslash( $_POST[ $k ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+		$v = trim( function_exists( 'mb_substr' ) ? mb_substr( $v, 0, 100 ) : substr( $v, 0, 100 ) );
+		if ( '' !== $v ) {
+			$out[ $k ] = $v;
+		}
+	}
+	return $out;
+}
+
 /** Posted state, or '' when missing or not one of the 50 states. */
 function fvr_posted_state(): string {
 	$state = isset( $_POST['state'] ) ? sanitize_text_field( wp_unslash( $_POST['state'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
@@ -190,6 +215,7 @@ function fvr_lead_form( string $type, string $button, string $consent = '', stri
 	echo '<input type="hidden" name="action" value="fvr_subscribe"><input type="hidden" name="fvr_type" value="' . esc_attr( $type ) . '"><input type="hidden" name="fvr_return" value="' . esc_attr( (string) get_the_ID() ) . '">';
 	wp_nonce_field( 'fvr_subscribe_' . $type, '_fvr_nonce' );
 	fvr_spam_fields();
+	fvr_utm_fields();
 	fvr_required_note();
 	?>
 	<div class="field">
@@ -267,7 +293,7 @@ function fvr_handle_subscribe(): void {
 		$first,
 		(int) fvr_opt( 'kit_form_' . $type ),
 		array( (int) fvr_opt( 'kit_tag_' . $type ) ),
-		array( 'state' => $state )
+		array_merge( array( 'state' => $state ), fvr_posted_utm() )
 	);
 	if ( is_wp_error( $result ) ) {
 		fvr_redirect_error( 'kit_unconfigured' === $result->get_error_code() ? 'config' : 'kit' );

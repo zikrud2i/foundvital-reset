@@ -34,6 +34,9 @@
 		});
 	}
 
+	/* Hand the visit's UTM tags to the sign-up forms; the server sends them to Kit. Blank when there are none. */
+	doc.querySelectorAll('input[data-utm]').forEach(function (el) { el.value = utm[el.getAttribute('data-utm')] || ''; });
+
 	/* ---------- Click tracking via data-track ---------- */
 	doc.addEventListener('click', function (e) {
 		var a = e.target.closest('[data-track]');

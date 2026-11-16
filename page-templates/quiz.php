@@ -70,6 +70,7 @@ while ( have_posts() ) :
 							<?php
 							wp_nonce_field( 'fvr_quiz', '_fvr_nonce' );
 							fvr_spam_fields();
+							fvr_utm_fields();
 							?>
 
 							<div class="quiz__progress" hidden>

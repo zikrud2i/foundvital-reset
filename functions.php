@@ -21,6 +21,7 @@ $fvr_includes = array(
 	'custom-fields',
 	'cpt',
 	'integrations',
+	'stripe',
 	'forms',
 	'quiz',
 	'security',
