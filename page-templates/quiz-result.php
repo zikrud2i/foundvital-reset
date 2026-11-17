@@ -3,9 +3,8 @@
  * Template Name: Reset – Quiz Result
  * Result kind is derived from the page slug: foundations (A), routine (B), coaching (C).
  *
- * One shared structure (Tara review copy, October 2026): welcome → "Your personal starting point"
- * (the only part that changes per result) → What is Reset? → four phases → Meet Tara → What you can
- * expect (incl. investment) → Explore Reset.
+ * Short result page (Tara, November 17, 2026): result, exercise, one invitation to book a Reset Fit Conversation,
+ * the disclaimer and a short Meet Tara block. Program details and pricing live on the home page (#fit-and-investment).
  *
  * @package foundvital-reset
  */
@@ -15,8 +14,6 @@ while ( have_posts() ) :
 	the_post();
 	$slug = get_post_field( 'post_name', get_the_ID() );
 
-	$pdf_url = fvr_checklist_pdf_url() ? fvr_checklist_pdf_url() : fvr_page_url( 'checklist' );
-	$home    = home_url( '/' );
 
 	/*
 	 * Result A is Tara's approved sample. B and C are drafted from the one-line briefs in her copy document
@@ -30,9 +27,6 @@ while ( have_posts() ) :
 			'ex_title' => 'Try this in five minutes',
 			'ex_steps' => array( 'Write down three health topics competing for your attention.', 'Circle one topic you\'d like to learn more about this week.', 'Name one habit you\'re already doing that you\'d like to keep.' ),
 			'ex_fill'  => 'One topic I want to understand better is __________. One habit I want to keep is __________.',
-			'invite'   => 'If you\'d like more structure around these priorities, you can learn about FoundVital Reset™, a 12-week coaching program guided by a PA with 16 years of clinical experience, with practical education and scheduled guidance.',
-			'primary'  => array( 'Explore FoundVital Reset™', $home, 'cta_explore_reset_result' ),
-			'second'   => array( 'Get the Free Printable Checklist', $pdf_url, 'checklist_download_click' ),
 		),
 		'routine'     => array(
 			'key'      => 'B',
@@ -41,9 +35,6 @@ while ( have_posts() ) :
 			'ex_title' => 'Plan one habit for two kinds of weeks',
 			'ex_steps' => array( 'Name one habit you want to keep.', 'Describe how it fits into an ordinary week: when, where, and for how long.', 'Describe a smaller backup version for a busy week.' ),
 			'ex_fill'  => 'My ordinary-week plan is __________. My busy-week backup is __________.',
-			'invite'   => 'If you\'d like a structured way to build routines like this, you can learn about FoundVital Reset™, a 12-week coaching program guided by a PA with 16 years of clinical experience, with practical education and scheduled guidance.',
-			'primary'  => array( 'Explore FoundVital Reset™', $home, 'cta_explore_reset_result' ),
-			'second'   => null,
 		),
 		'coaching'    => array(
 			'key'      => 'C',
@@ -52,9 +43,6 @@ while ( have_posts() ) :
 			'ex_title' => 'Questions to bring to a conversation',
 			'ex_steps' => array( 'What do I most want help with over the next 12 weeks?', 'How much time could I realistically set aside each week?', 'What kind of support and accountability helps me follow through?' ),
 			'ex_fill'  => 'My top goal is __________. The time I can set aside each week is __________.',
-			'invite'   => 'A Reset Fit Conversation gives you time to ask questions and decide whether FoundVital Reset™, a 12-week coaching program guided by a PA with 16 years of clinical experience, matches what you\'re looking for.',
-			'primary'  => array( 'Book a Reset Fit Conversation', fvr_page_url( 'fit-call' ), 'cta_fit_call_result' ),
-			'second'   => array( 'Explore the Reset program', $home, 'cta_explore_reset_result' ),
 		),
 	);
 	$d    = $defaults[ $slug ] ?? $defaults['foundations'];
@@ -95,66 +83,25 @@ while ( have_posts() ) :
 					<p class="exercise__fill"><?php echo esc_html( $d['ex_fill'] ); ?></p>
 				</div>
 
-				<p><?php echo esc_html( $d['invite'] ); ?></p>
-				<div class="btn-row">
-					<?php fvr_btn( $d['primary'][0], $d['primary'][1], 'primary', $d['primary'][2] ); ?>
-					<?php if ( $d['second'] ) : ?>
-						<?php fvr_btn( $d['second'][0], $d['second'][1], 'ghost', $d['second'][2] ); ?>
-					<?php endif; ?>
+				<p class="result-next"><?php esc_html_e( 'Want help putting this into practice? FoundVital Reset is a 12-week coaching program with Tara, a PA with 16 years of clinical experience. You get a personalized roadmap, weekly lessons, an onboarding call and five coaching check-ins, so exercises like this one turn into routines that hold up in real life.', 'fvr' ); ?></p>
+				<div class="result-next__actions">
+					<?php fvr_btn( __( 'Book a Reset Fit Conversation', 'fvr' ), fvr_page_url( 'fit-call' ), 'primary', 'cta_fit_call_result' ); ?>
+					<a class="result-next__link" href="<?php echo esc_url( home_url( '/#fit-and-investment' ) ); ?>" data-track="cta_program_details_result"><?php esc_html_e( "See what's included and the investment.", 'fvr' ); ?></a>
 				</div>
 			</div>
 			<p class="fineprint"><?php esc_html_e( 'This result is an educational reflection based on your preferences. It is not a validated score, a clinical judgment, medical advice, or a treatment recommendation.', 'fvr' ); ?></p>
 		</div>
 	</section>
 
-	<section class="section section--sand" aria-labelledby="what-title">
-		<div class="container container--narrow text-center reveal">
-			<p class="eyebrow"><?php esc_html_e( 'About the program', 'fvr' ); ?></p>
-			<h2 id="what-title"><?php esc_html_e( 'What is FoundVital Reset™?', 'fvr' ); ?></h2>
-			<p>FoundVital Reset™ is a 12-week coaching program, guided by a PA with 16 years of clinical experience, designed to help women bring nutrition, strength, sleep, and recovery into a more workable approach. It combines practical learning with scheduled guidance and accountability from Tara, without another rigid set of rules.</p>
-		</div>
-	</section>
-
-	<?php get_template_part( 'template-parts/phases' ); ?>
-
-	<section class="section" aria-labelledby="tara-title">
+	<section class="section section--sand" aria-labelledby="tara-title">
 		<div class="container container--narrow">
 			<div class="result-tara reveal">
 				<?php echo $tara; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<div>
 					<p class="eyebrow"><?php esc_html_e( 'Meet Tara', 'fvr' ); ?></p>
-					<h2 id="tara-title" class="h3"><?php esc_html_e( 'Hi, I\'m Tara Schmidt, PA-C, DipACLM.', 'fvr' ); ?></h2>
+					<h2 id="tara-title" class="h3"><?php esc_html_e( "Hi, I'm Tara Schmidt, PA-C, DipACLM.", 'fvr' ); ?></h2>
 					<p>My 16 years of clinical experience as a physician assistant and my training in lifestyle medicine have shaped how I think about health. Knowing what to do and figuring out how to make it work in everyday life are two different things. I created Reset to bring practical education and real guidance together, so you have a clearer way to work toward your goals.</p>
 				</div>
-			</div>
-		</div>
-	</section>
-
-	<section class="section section--sand" aria-labelledby="expect-title">
-		<div class="container container--narrow">
-			<div class="section__head reveal">
-				<p class="eyebrow"><?php esc_html_e( 'The details', 'fvr' ); ?></p>
-				<h2 id="expect-title"><?php esc_html_e( 'What you can expect', 'fvr' ); ?></h2>
-			</div>
-			<div class="panel reveal">
-				<ul class="check-list">
-					<li><?php echo fvr_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php esc_html_e( 'A largely self-paced 12-week coaching experience with weekly educational lessons.', 'fvr' ); ?></span></li>
-					<li><?php echo fvr_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php esc_html_e( 'One 60-minute individual onboarding call and five 30-minute individual coaching check-ins.', 'fvr' ); ?></span></li>
-					<li><?php echo fvr_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php esc_html_e( 'A private Circle community, a Welcome Kit, and other included resources.', 'fvr' ); ?></span></li>
-					<li><?php echo fvr_icon( 'check' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span><?php esc_html_e( 'Typical participation is about 3–4 hours a week.', 'fvr' ); ?></span></li>
-				</ul>
-			</div>
-			<?php get_template_part( 'template-parts/pricing', null, array( 'heading_level' => 3 ) ); ?>
-		</div>
-	</section>
-
-	<section class="cta-band" aria-labelledby="explore-title">
-		<div class="container container--narrow text-center reveal">
-			<h2 id="explore-title"><?php esc_html_e( 'Explore Reset', 'fvr' ); ?></h2>
-			<p><?php esc_html_e( 'Ready to learn more? Take a look at the full Reset program, including how it works, what is included, pricing, and how to book a Reset Fit Conversation.', 'fvr' ); ?></p>
-			<div class="btn-row btn-row--center">
-				<?php fvr_btn( __( 'See Program Details & Investment', 'fvr' ), home_url( '/#fit-and-investment' ), 'gold', 'cta_program_details_result' ); ?>
-				<?php fvr_btn( __( 'Retake the quiz', 'fvr' ), fvr_page_url( 'quiz' ), 'light' ); ?>
 			</div>
 		</div>
 	</section>

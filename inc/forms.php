@@ -22,6 +22,7 @@ function fvr_error_message( string $code ): string {
 		'consent' => 'Please tick the consent box so we can email you.',
 		'config'  => 'Sign-up isn\'t available right now. Please try again later.',
 		'kit'     => 'We couldn\'t complete your sign-up just now. Please try again in a moment.',
+		'kitquiz'=> 'We could not save your email just now, so your result is not ready yet. Your answers are still here. Please try again in a moment.',
 		'invalid' => 'Something went wrong. Please try again.',
 		'quizmiss'=> 'Please answer every question to see your result.',
 	);

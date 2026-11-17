@@ -2,8 +2,9 @@
 /**
  * Template Name: Reset – Quiz
  *
- * Copy follows "Checklist & Quiz Landing Page Copy – Tara Review, October 2026". The required email
- * subscription comes first ("Start My Free Reset Quiz"), then the seven questions, then the result.
+ * Quiz first, email last (Tara, November 17, 2026): the page opens on question 1 with no form. After question 7 a
+ * final step ("Your result is ready") asks for first name and email; submitting subscribes the visitor in Kit
+ * (result tag + UTM values) and redirects to the matching result page.
  *
  * @package foundvital-reset
  */
@@ -15,6 +16,11 @@ while ( have_posts() ) :
 	$total     = count( $questions );
 	$capture   = 'off' !== fvr_opt( 'quiz_capture', 'required' );
 	$explore   = fvr_lines( fvr_field( 'page_points', "Whether you're looking for a clearer starting point around nutrition, strength, sleep, and recovery.\nWhether making healthy habits fit your schedule is the harder part.\nWhether you want to understand what guidance and accountability from a coach would involve." ) );
+	$privacy   = get_page_by_path( 'privacy-policy' );
+	$plabel    = esc_html__( 'Privacy Policy', 'fvr' );
+	if ( $privacy && 'publish' === $privacy->post_status ) {
+		$plabel = '<a href="' . esc_url( get_permalink( $privacy ) ) . '">' . $plabel . '</a>';
+	}
 	get_template_part(
 		'template-parts/page-hero',
 		null,
@@ -63,7 +69,9 @@ while ( have_posts() ) :
 							<div class="alert alert--warn"><strong><?php esc_html_e( 'Editor preview.', 'fvr' ); ?></strong> <?php esc_html_e( 'The quiz is not live for the public yet.', 'fvr' ); ?></div>
 						<?php endif; ?>
 
-						<form class="quiz" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" novalidate data-questions="<?php echo esc_attr( (string) $total ); ?>" data-intro="<?php echo $capture ? '1' : '0'; ?>">
+						<p class="quiz__lead"><?php esc_html_e( 'Free, takes 2 to 3 minutes. We\'ll email you your result.', 'fvr' ); ?></p>
+
+						<form class="quiz" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" novalidate data-questions="<?php echo esc_attr( (string) $total ); ?>" data-final="<?php echo $capture ? '1' : '0'; ?>">
 							<?php fvr_render_form_error(); ?>
 							<input type="hidden" name="action" value="fvr_quiz">
 							<input type="hidden" name="fvr_return" value="<?php echo esc_attr( (string) get_the_ID() ); ?>">
@@ -77,27 +85,6 @@ while ( have_posts() ) :
 								<div class="quiz__bar" role="progressbar" aria-valuemin="0" aria-valuemax="<?php echo esc_attr( (string) $total ); ?>" aria-valuenow="0" aria-label="<?php esc_attr_e( 'Quiz progress', 'fvr' ); ?>"><span></span></div>
 								<p class="quiz__count" aria-live="polite"></p>
 							</div>
-
-							<?php if ( $capture ) : ?>
-								<fieldset class="quiz__step quiz__step--intro" data-step="0">
-									<legend><span class="quiz__num"><?php esc_html_e( 'Free quiz', 'fvr' ); ?></span><?php esc_html_e( 'Start your free Reset quiz', 'fvr' ); ?></legend>
-									<?php fvr_required_note(); ?>
-									<p class="field__error" id="quiz-caperr" role="alert" hidden></p>
-									<div class="field">
-										<label for="quiz-fn"><?php esc_html_e( 'First name', 'fvr' ); ?> <span class="req" aria-hidden="true">*</span></label>
-										<input id="quiz-fn" type="text" name="first_name" autocomplete="given-name" maxlength="60" required>
-									</div>
-									<div class="field">
-										<label for="quiz-em"><?php esc_html_e( 'Email address', 'fvr' ); ?> <span class="req" aria-hidden="true">*</span></label>
-										<input id="quiz-em" type="email" name="email" autocomplete="email" required>
-									</div>
-									<?php fvr_state_field( 'quiz' ); ?>
-									<div class="field field--check">
-										<input id="quiz-co" type="checkbox" name="consent" value="1" required>
-										<label for="quiz-co"><?php esc_html_e( 'Yes, I want to subscribe to FoundVital emails with practical wellness education, program news, events and occasional offers. I understand I can unsubscribe at any time. A FoundVital email subscription is required to take the quiz and receive my result.', 'fvr' ); ?> <span class="req" aria-hidden="true">*</span></label>
-									</div>
-								</fieldset>
-							<?php endif; ?>
 
 							<?php
 							$n = 0;
@@ -118,18 +105,31 @@ while ( have_posts() ) :
 								</fieldset>
 							<?php endforeach; ?>
 
+							<?php if ( $capture ) : ?>
+								<fieldset class="quiz__step quiz__step--final" data-step="<?php echo esc_attr( (string) ( $total + 1 ) ); ?>">
+									<legend><span class="quiz__num"><?php esc_html_e( 'Last step', 'fvr' ); ?></span><?php esc_html_e( 'Your result is ready', 'fvr' ); ?></legend>
+									<?php fvr_required_note(); ?>
+									<p class="field__error" id="quiz-caperr" role="alert" hidden></p>
+									<div class="field">
+										<label for="quiz-fn"><?php esc_html_e( 'First name', 'fvr' ); ?> <span class="req" aria-hidden="true">*</span></label>
+										<input id="quiz-fn" type="text" name="first_name" autocomplete="given-name" maxlength="60" required>
+									</div>
+									<div class="field">
+										<label for="quiz-em"><?php esc_html_e( 'Email address', 'fvr' ); ?> <span class="req" aria-hidden="true">*</span></label>
+										<input id="quiz-em" type="email" name="email" autocomplete="email" required>
+									</div>
+								</fieldset>
+							<?php endif; ?>
+
 							<div class="quiz__nav">
 								<button type="button" class="btn btn--ghost" data-quiz-back hidden><span><?php esc_html_e( 'Back', 'fvr' ); ?></span></button>
-								<button type="button" class="btn btn--primary" data-quiz-next hidden data-label-start="<?php esc_attr_e( 'Start My Free Reset Quiz', 'fvr' ); ?>" data-label-next="<?php esc_attr_e( 'Next', 'fvr' ); ?>"><span><?php esc_html_e( 'Next', 'fvr' ); ?></span><?php echo fvr_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
-								<button type="submit" class="btn btn--primary" data-quiz-submit><span><?php esc_html_e( 'See My Result', 'fvr' ); ?></span><?php echo fvr_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
+								<button type="button" class="btn btn--primary" data-quiz-next hidden><span><?php esc_html_e( 'Next', 'fvr' ); ?></span><?php echo fvr_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
+								<button type="submit" class="btn btn--primary" data-quiz-submit><span><?php echo $capture ? esc_html__( 'Show my result', 'fvr' ) : esc_html__( 'See my result', 'fvr' ); ?></span><?php echo fvr_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></button>
 							</div>
 
-							<p class="fineprint"><?php esc_html_e( 'Takes approximately 2–3 minutes. The free quiz is offered with a clearly disclosed FoundVital marketing subscription. After you answer seven questions, you\'ll see your result right away and receive it by email.', 'fvr' ); ?></p>
-							<?php
-							if ( $capture ) {
-								fvr_signup_privacy_note( __( 'Follow-up education continues while you\'re subscribed. Your result is an educational reflection, not medical advice, diagnosis or treatment recommendations.', 'fvr' ) );
-							}
-							?>
+							<?php if ( $capture ) : ?>
+								<p class="quiz__consent" data-quiz-consent><?php esc_html_e( 'By continuing, you\'ll get your result by email, plus FoundVital tips, program news and offers. Unsubscribe anytime.', 'fvr' ); ?> <?php echo $plabel; // phpcs:ignore WordPress.Security.EscapeOutput -- escaped above. ?></p>
+							<?php endif; ?>
 						</form>
 					</div>
 					<p class="fineprint split__disclaimer"><?php esc_html_e( 'This quiz is for education only and does not provide medical advice, diagnosis, or treatment.', 'fvr' ); ?></p>

@@ -527,3 +527,18 @@ main:focus { outline: none; }
 /* Legal pages (privacy policy, enrollment terms): numbered section headings are 20px desktop / 18px mobile. */
 .prose h2 { font-size: 1.25rem; font-weight: 600; line-height: 1.35; margin: 32px 0 8px; }
 @media (max-width: 600px) { .prose h2 { font-size: 1.125rem; } }
+/* Quiz first, email last */
+.quiz__lead { margin: 0 0 20px; font-size: 1.05rem; color: var(--navy); font-weight: 500; }
+.quiz__consent { margin: 16px 0 0; font-size: 1rem; line-height: 1.55; color: inherit; text-align: left; }
+.quiz__consent a { text-decoration: underline; text-underline-offset: 3px; }
+.quiz__consent[hidden] { display: none; }
+@media (max-width: 900px) { .split__form:has(.quiz) { order: -1; } }
+.result-next { margin: 1.4rem 0 1rem; }
+.result-next__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
+.result-next__link { color: var(--teal); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+.result-next__link:hover { color: var(--teal-deep); }
+/* Ad traffic on phones: lead with question 1, not the intro paragraph. */
+@media (max-width: 700px) { .page-hero:has(+ #quiz) .lead { display: none; } }
+/* Enroll page: the panel after the price block uses the same width and spacing as the price block. */
+.pricing + .panel { max-width: 760px; margin: clamp(28px, 4vw, 48px) auto 0; }
+.pricing + .panel + .fineprint { max-width: 760px; margin-inline: auto; }

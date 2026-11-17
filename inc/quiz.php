@@ -1,6 +1,6 @@
 <?php
 /**
- * Quiz: question loading, server-side scoring, result routing, required Kit capture.
+ * Quiz: question loading, server-side scoring, result routing, email capture last (Kit tag + UTM).
  * Scoring is intentionally simple (one point per answer toward A/B/C) and educational only.
  *
  * @package foundvital-reset
@@ -118,36 +118,37 @@ function fvr_handle_quiz(): void {
 
 	$result = fvr_quiz_results()[ fvr_quiz_winner( $tally, $picks ) ];
 
-	// Required email step: the result is only shown once first name, email, state and consent are given.
-	// Only the result category is sent to Kit (as a tag), never answers. A Kit outage still shows the result.
+	// Email comes last: the result is shown only after first name and email are given and Kit has accepted the
+	// sign-up. Only the result category (a tag) and the UTM values go to Kit, never the answers. If Kit fails, the
+	// visitor sees an error and the answers stay on the page (main.js submits in the background).
 	$sub_flag = 'none';
 	if ( 'off' !== fvr_opt( 'quiz_capture', 'required' ) ) {
 		$first = isset( $_POST['first_name'] ) ? mb_substr( trim( sanitize_text_field( wp_unslash( $_POST['first_name'] ) ) ), 0, 60 ) : '';
 		$email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
-		$state = fvr_posted_state();
 		if ( '' === $first ) {
 			fvr_redirect_error( 'name', 'quiz' );
 		}
 		if ( ! is_email( $email ) ) {
 			fvr_redirect_error( 'email', 'quiz' );
 		}
-		if ( '' === $state ) {
-			fvr_redirect_error( 'state', 'quiz' );
-		}
-		if ( empty( $_POST['consent'] ) ) {
-			fvr_redirect_error( 'consent', 'quiz' );
-		}
-		$r        = fvr_kit_subscribe(
+		$r = fvr_kit_subscribe(
 			$email,
 			$first,
 			(int) fvr_opt( 'kit_form_quiz' ),
 			array( (int) fvr_opt( 'kit_tag_quiz_any' ), (int) fvr_opt( $result['tag'] ) ),
-			array_merge( array( 'state' => $state ), fvr_posted_utm() )
+			fvr_posted_utm()
 		);
-		$sub_flag = is_wp_error( $r ) ? 'failed' : 'ok';
+		if ( is_wp_error( $r ) ) {
+			fvr_redirect_error( 'kitquiz', 'quiz' );
+		}
+		$sub_flag = 'ok';
 	}
 
 	fvr_set_success_cookie( 'quiz' );
-	wp_safe_redirect( add_query_arg( 'fvr_sub', $sub_flag, fvr_page_url( 'results/' . $result['slug'] ) ) );
+	$url = add_query_arg( 'fvr_sub', $sub_flag, fvr_page_url( 'results/' . $result['slug'] ) );
+	if ( fvr_is_ajax_submit() ) {
+		wp_send_json_success( array( 'redirect' => $url ) );
+	}
+	wp_safe_redirect( $url );
 	exit;
 }
